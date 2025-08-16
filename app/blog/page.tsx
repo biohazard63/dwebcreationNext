@@ -48,7 +48,7 @@ export default function BlogPage() {
             développement moderne.
           </p>
           
-          <h3>UX/UI Design</3>
+          <h3>UX/UI Design</h3>
           <p>
             Design d'interface, expérience utilisateur, accessibilité et 
             tendances du design web.

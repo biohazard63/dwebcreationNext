@@ -1,29 +1,73 @@
 "use client"
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Moon, Sun } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: 'Accueil', href: '/' },
+  { name: 'À propos de moi', href: '/about' },
   { name: 'Services', href: '/services' },
   { name: 'Portfolio', href: '/portfolio' },
-  { name: 'Blog', href: '/blog' },
-  { name: 'À propos', href: '/about' },
+  { name: 'Actualités', href: '/blog' },
   { name: 'Contact', href: '/contact' },
 ]
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isDarkMode, setIsDarkMode] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  // Détecter la préférence utilisateur au chargement
+  useEffect(() => {
+    setMounted(true)
+    
+    // Vérifier si l'utilisateur a déjà une préférence sauvegardée
+    const savedTheme = localStorage.getItem('theme')
+    
+    if (savedTheme) {
+      // Utiliser la préférence sauvegardée
+      if (savedTheme === 'dark') {
+        setIsDarkMode(true)
+        document.documentElement.classList.add('dark')
+      } else {
+        setIsDarkMode(false)
+        document.documentElement.classList.remove('dark')
+      }
+    } else {
+      // Détecter la préférence système
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+      setIsDarkMode(prefersDark)
+      if (prefersDark) {
+        document.documentElement.classList.add('dark')
+      }
+    }
+  }, [])
+
+  const toggleDarkMode = () => {
+    const newDarkMode = !isDarkMode
+    setIsDarkMode(newDarkMode)
+    
+    if (newDarkMode) {
+      document.documentElement.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+    }
+  }
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-200 dark:border-neutral-800 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <nav className="container flex h-16 items-center justify-between">
         <div className="flex lg:flex-1">
-          <Link href="/" className="-m-1.5 p-1.5">
-            <span className="text-xl font-bold gradient-text">DWebCreation</span>
+          <Link href="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
+            <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg flex items-center justify-center">
+              <span className="text-white font-bold text-sm">D</span>
+            </div>
+            <span className="text-xl font-bold text-foreground">D Web Créations</span>
           </Link>
         </div>
         
@@ -38,7 +82,7 @@ export function Header() {
           </Button>
         </div>
         
-        <div className="hidden lg:flex lg:gap-x-12">
+        <div className="hidden lg:flex lg:gap-x-8">
           {navigation.map((item) => (
             <Link
               key={item.name}
@@ -50,9 +94,24 @@ export function Header() {
           ))}
         </div>
         
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Button asChild>
-            <Link href="/contact">Démarrer un projet</Link>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end items-center space-x-4">
+          {mounted && (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
+              className="mr-2"
+            >
+              {isDarkMode ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+              <span className="sr-only">Toggle dark mode</span>
+            </Button>
+          )}
+          <Button asChild className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white border-0">
+            <Link href="/contact">Démarrer votre projet</Link>
           </Button>
         </div>
       </nav>
@@ -63,8 +122,11 @@ export function Header() {
           <div className="fixed inset-0 z-50" />
           <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
-              <Link href="/" className="-m-1.5 p-1.5">
-                <span className="text-xl font-bold gradient-text">DWebCreation</span>
+              <Link href="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">D</span>
+                </div>
+                <span className="text-xl font-bold text-foreground">D Web Créations</span>
               </Link>
               <Button
                 variant="ghost"
@@ -89,9 +151,29 @@ export function Header() {
                     </Link>
                   ))}
                 </div>
-                <div className="py-6">
-                  <Button asChild className="w-full">
-                    <Link href="/contact">Démarrer un projet</Link>
+                <div className="py-6 space-y-4">
+                  {mounted && (
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={toggleDarkMode}
+                      className="w-full justify-start"
+                    >
+                      {isDarkMode ? (
+                        <>
+                          <Sun className="h-5 w-5 mr-2" />
+                          Mode clair
+                        </>
+                      ) : (
+                        <>
+                          <Moon className="h-5 w-5 mr-2" />
+                          Mode sombre
+                        </>
+                      )}
+                    </Button>
+                  )}
+                  <Button asChild className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white border-0">
+                    <Link href="/contact">Démarrer votre projet</Link>
                   </Button>
                 </div>
               </div>
