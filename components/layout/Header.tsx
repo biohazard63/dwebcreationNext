@@ -31,7 +31,7 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
   }, [open])
 
   return (
-    <header className="sticky top-0 z-50 border-b border-line-dark/60 bg-ink text-paper-50">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-night text-white">
       <nav className="container flex h-[4.5rem] items-center justify-between" aria-label="Navigation principale">
         <Logo />
 
@@ -45,7 +45,7 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
                   aria-current={active ? 'page' : undefined}
                   className={cn(
                     'text-sm transition-colors hover:text-white',
-                    active ? 'text-white' : 'text-stone-light'
+                    active ? 'text-white' : 'text-mist'
                   )}
                 >
                   {item.name}
@@ -58,19 +58,19 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
         <div className="hidden items-center gap-6 lg:flex">
           <a
             href={siteConfig.phoneHref}
-            className="flex items-center gap-2 text-sm text-stone-light transition-colors hover:text-white"
+            className="flex items-center gap-2 text-sm text-mist transition-colors hover:text-white"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {siteConfig.phone}
           </a>
-          <Button asChild size="sm">
+          <Button asChild size="sm" className="bg-gradient-to-r from-flame via-blush to-violet hover:opacity-90">
             <Link href="/contact">Devis gratuit</Link>
           </Button>
         </div>
 
         <button
           type="button"
-          className="-mr-2 flex h-10 w-10 items-center justify-center rounded-full text-paper-50 hover:bg-white/10 lg:hidden"
+          className="-mr-2 flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-white/10 lg:hidden"
           onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-controls="mobile-menu"
@@ -83,7 +83,7 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
       {open && (
         <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" className="fixed inset-0 z-50 lg:hidden">
           <div className="absolute inset-0 bg-ink/60" onClick={() => setOpen(false)} />
-          <div className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-ink px-6 py-5 text-paper-50">
+          <div className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-night px-6 py-5 text-white">
             <div className="flex items-center justify-between">
               <Logo />
               <button
@@ -100,7 +100,7 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="block py-3 font-display text-3xl"
+                    className="block py-3 font-grotesk text-3xl font-semibold tracking-tight"
                     aria-current={pathname === item.href ? 'page' : undefined}
                   >
                     {item.name}
@@ -108,8 +108,8 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
                 </li>
               ))}
             </ul>
-            <div className="mt-auto space-y-3 border-t border-line-dark pt-6">
-              <Button asChild size="lg" className="w-full">
+            <div className="mt-auto space-y-3 border-t border-white/10 pt-6">
+              <Button asChild size="lg" className="w-full bg-gradient-to-r from-flame via-blush to-violet">
                 <Link href="/contact">Demander un devis gratuit</Link>
               </Button>
               <Button asChild size="lg" variant="outline-light" className="w-full">

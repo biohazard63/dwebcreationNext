@@ -5,23 +5,23 @@ import { offers } from '@/lib/data/offers'
 
 export function Footer({ links }: { links: { name: string; href: string }[] }) {
   return (
-    <footer className="bg-ink pb-28 pt-20 text-paper-50 lg:pb-12">
+    <footer className="border-t border-white/10 bg-night pb-28 pt-20 text-white lg:pb-12">
       <div className="container">
         <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
           <div>
             <Logo />
-            <p className="mt-6 max-w-sm leading-relaxed text-stone-light">
+            <p className="mt-6 max-w-sm leading-relaxed text-mist">
               Développeur web indépendant à {siteConfig.city}. Des sites internet clairs et efficaces
               pour les artisans, commerçants et indépendants.
             </p>
           </div>
 
           <div>
-            <h2 className="text-sm font-medium text-paper-50">Services</h2>
+            <h2 className="text-sm font-medium text-white">Services</h2>
             <ul className="mt-5 space-y-3 text-sm">
               {offers.map((offer) => (
                 <li key={offer.id}>
-                  <Link href={`/services#${offer.id}`} className="text-stone-light transition-colors hover:text-white">
+                  <Link href={`/services#${offer.id}`} className="text-mist transition-colors hover:text-white">
                     {offer.name}
                   </Link>
                 </li>
@@ -30,11 +30,11 @@ export function Footer({ links }: { links: { name: string; href: string }[] }) {
           </div>
 
           <div>
-            <h2 className="text-sm font-medium text-paper-50">Navigation</h2>
+            <h2 className="text-sm font-medium text-white">Navigation</h2>
             <ul className="mt-5 space-y-3 text-sm">
               {links.map((item) => (
                 <li key={item.href}>
-                  <Link href={item.href} className="text-stone-light transition-colors hover:text-white">
+                  <Link href={item.href} className="text-mist transition-colors hover:text-white">
                     {item.name}
                   </Link>
                 </li>
@@ -43,8 +43,8 @@ export function Footer({ links }: { links: { name: string; href: string }[] }) {
           </div>
 
           <div>
-            <h2 className="text-sm font-medium text-paper-50">Contact</h2>
-            <ul className="mt-5 space-y-3 text-sm text-stone-light">
+            <h2 className="text-sm font-medium text-white">Contact</h2>
+            <ul className="mt-5 space-y-3 text-sm text-mist">
               <li>
                 <a href={siteConfig.phoneHref} className="transition-colors hover:text-white">
                   {siteConfig.phone}
@@ -61,7 +61,7 @@ export function Footer({ links }: { links: { name: string; href: string }[] }) {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-6 border-t border-line-dark pt-8 text-sm text-stone-light md:flex-row md:items-center md:justify-between">
+        <div className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-8 text-sm text-mist md:flex-row md:items-center md:justify-between">
           <p>© {new Date().getFullYear()} {siteConfig.name}</p>
           <ul className="flex flex-wrap gap-x-6 gap-y-2">
             {siteConfig.social.map((item) => (

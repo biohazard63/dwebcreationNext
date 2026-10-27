@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, Instrument_Serif } from 'next/font/google'
+import { Bricolage_Grotesque, Inter, Instrument_Serif } from 'next/font/google'
 import './globals.css'
 import { defaultMetadata, localBusinessJsonLd } from '@/lib/seo'
 import { navigation } from '@/lib/site'
@@ -17,10 +17,12 @@ const display = Instrument_Serif({
   variable: '--font-display',
 })
 
+const grotesk = Bricolage_Grotesque({ subsets: ['latin'], display: 'swap', variable: '--font-grotesk' })
+
 export const metadata: Metadata = defaultMetadata
 
 export const viewport: Viewport = {
-  themeColor: '#12110F',
+  themeColor: '#07070A',
 }
 
 // Active les animations d'apparition uniquement si JavaScript est disponible
@@ -31,7 +33,7 @@ const links = navigation.filter((item) => item.href !== '/portfolio' || projects
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${sans.variable} ${display.variable} scroll-smooth`} suppressHydrationWarning>
+    <html lang="fr" className={`${sans.variable} ${display.variable} ${grotesk.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: jsScript }} />
       </head>

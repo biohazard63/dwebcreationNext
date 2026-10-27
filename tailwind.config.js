@@ -14,6 +14,19 @@ module.exports = {
     },
     extend: {
       colors: {
+        night: {
+          DEFAULT: '#07070A',
+          800: '#0E0E14',
+          700: '#16161F',
+          600: '#22222E',
+        },
+        mist: {
+          DEFAULT: '#A1A1B5',
+          dark: '#6E6E82',
+        },
+        flame: '#FF7A30',
+        blush: '#FF3D7F',
+        violet: '#8B5CF6',
         ink: {
           DEFAULT: '#12110F',
           800: '#1C1B18',
@@ -47,6 +60,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
         display: ['var(--font-display)', 'Georgia', 'serif'],
+        grotesk: ['var(--font-grotesk)', 'system-ui', 'sans-serif'],
       },
       letterSpacing: {
         eyebrow: '0.18em',
