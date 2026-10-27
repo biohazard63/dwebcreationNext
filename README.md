@@ -7,7 +7,7 @@ Site web professionnel pour une agence de développement web moderne, construit 
 - **Framework :** Next.js 15 avec App Router
 - **Frontend :** React 19, TypeScript
 - **Styling :** Tailwind CSS v4, shadcn/ui
-- **Email :** Resend
+- **Email :** Gmail (SMTP via Nodemailer) ou Resend
 - **SEO :** next-sitemap, Metadata API
 - **UI Components :** Radix UI, Lucide React
 - **Qualité :** ESLint, Prettier, Husky
@@ -33,8 +33,8 @@ Site web professionnel pour une agence de développement web moderne, construit 
    Puis éditer `.env.local` avec vos variables :
    ```env
    SITE_URL=https://dwebcreation.com
-   RESEND_API_KEY=your_resend_api_key_here
-   CONTACT_FROM_EMAIL="D Web Créations <contact@dwebcreation.com>"
+   SMTP_USER=quentindevaulx63@gmail.com
+   SMTP_PASS=mot-de-passe-d-application
    CONTACT_TO_EMAIL=quentindevaulx63@gmail.com
    GOOGLE_SITE_VERIFICATION=   # optionnel
    ```
@@ -62,7 +62,7 @@ dwebcreationNext/
 │   ├── portfolio/            # Réalisations (masquée tant qu'elle est vide)
 │   ├── about/  contact/      # À propos, Contact
 │   ├── mentions-legales/  confidentialite/
-│   └── api/contact/          # Envoi du formulaire (Resend)
+│   └── api/contact/          # Envoi du formulaire (Gmail SMTP ou Resend)
 ├── components/
 │   ├── home/                 # Sections de l'accueil, mini-sites de démo
 │   ├── demos/  simulator/  contact/
@@ -92,14 +92,28 @@ dwebcreationNext/
 Les couleurs (`night`, `mist`, `flame`, `blush`, `violet`) sont définies dans `tailwind.config.js`, les effets (dégradés, verre, animations) dans `app/globals.css`.
 
 ### Formulaire de Contact
-Le formulaire utilise Resend pour l'envoi d'emails. Configurez votre clé API dans `.env.local`.
+Le formulaire envoie les emails via Gmail (SMTP) ou Resend : voir « Configuration Email » ci-dessous.
 
 ## 📧 Configuration Email
 
-1. Créez un compte sur [Resend](https://resend.com)
-2. Obtenez votre clé API
-3. Ajoutez-la dans `.env.local`
-4. Configurez votre domaine d'envoi dans Resend
+Le formulaire envoie deux emails : la demande (vers vous, « Répondre » écrit directement au client) et une confirmation au visiteur.
+
+### Option 1 — Gmail (sans nom de domaine)
+1. Activez la **validation en deux étapes** sur votre compte Google.
+2. Créez un **mot de passe d'application** sur https://myaccount.google.com/apppasswords (nom : « Site web »).
+3. Renseignez dans `.env.local` (et dans les variables d'environnement Vercel) :
+   ```env
+   SMTP_USER=quentindevaulx63@gmail.com
+   SMTP_PASS=le-mot-de-passe-de-16-caracteres
+   ```
+
+### Option 2 — Resend (avec un nom de domaine)
+1. Créez un compte sur https://resend.com et vérifiez votre domaine.
+2. Renseignez `RESEND_API_KEY` et `CONTACT_FROM_EMAIL="D Web Créations <contact@votre-domaine.fr>"`.
+
+Sans domaine vérifié, Resend n'envoie qu'à l'adresse de votre compte Resend : la demande arrive, mais pas l'email de confirmation au visiteur.
+
+Si SMTP et Resend sont configurés tous les deux, SMTP est utilisé.
 
 ## 🚀 Déploiement
 

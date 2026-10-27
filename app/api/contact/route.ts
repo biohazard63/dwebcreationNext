@@ -1,10 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
 import { siteConfig } from '@/lib/site'
 import { projectTypes } from '@/lib/data/contact'
+import { canSendToVisitors, mailProvider, sendMail } from '@/lib/mail'
 
-// L'adresse d'expédition doit appartenir à un domaine vérifié dans Resend
-const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || `${siteConfig.name} <contact@dwebcreation.com>`
 const TO_EMAIL = process.env.CONTACT_TO_EMAIL || siteConfig.email
 
 const MAX_LENGTHS = { name: 100, email: 254, phone: 30, company: 100, message: 5000 }
@@ -37,8 +35,8 @@ function asTrimmedString(value: unknown) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY manquante')
+    if (!mailProvider()) {
+      console.error('Envoi d’emails non configuré : renseigner SMTP_USER / SMTP_PASS ou RESEND_API_KEY')
       return NextResponse.json(
         { error: 'Le service d\'envoi est temporairement indisponible' },
         { status: 503 }
@@ -100,7 +98,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY)
     const safeName = escapeHtml(name)
     const safeEmail = escapeHtml(email)
     const safePhone = escapeHtml(phone)
@@ -109,78 +106,77 @@ export async function POST(request: NextRequest) {
     const subjectName = name.replace(/[\r\n]+/g, ' ')
 
     // Envoi de l'email de notification
-    const { error } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [TO_EMAIL],
-      replyTo: email,
-      subject: `Nouveau message de contact - ${subjectName}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #B85C2A;">Nouvelle demande de contact</h2>
-          
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin-top: 0;">Informations du contact :</h3>
-            <p><strong>Nom :</strong> ${safeName}</p>
-            <p><strong>Email :</strong> ${safeEmail}</p>
-            ${safePhone ? `<p><strong>Téléphone :</strong> ${safePhone}</p>` : ''}
-            ${safeCompany ? `<p><strong>Entreprise :</strong> ${safeCompany}</p>` : ''}
-            ${projectType ? `<p><strong>Projet :</strong> ${escapeHtml(projectType.label)}</p>` : ''}
-          </div>
-          
-          <div style="background-color: #f1f5f9; padding: 20px; border-radius: 8px;">
-            <h3 style="margin-top: 0;">Message :</h3>
-            <p style="white-space: pre-wrap;">${safeMessage}</p>
-          </div>
-          
-          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-            <p style="color: #64748b; font-size: 14px;">
-              Ce message a été envoyé depuis le formulaire de contact du site ${siteConfig.name}.
-            </p>
-          </div>
-        </div>
-      `,
-    })
+    try {
+      await sendMail({
+        to: TO_EMAIL,
+        replyTo: email,
+        subject: `Nouvelle demande de contact - ${subjectName}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #FF3D7F;">Nouvelle demande de contact</h2>
 
-    if (error) {
-      console.error('Erreur Resend:', error)
+            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0;">Informations du contact :</h3>
+              <p><strong>Nom :</strong> ${safeName}</p>
+              <p><strong>Email :</strong> ${safeEmail}</p>
+              ${safePhone ? `<p><strong>Téléphone :</strong> ${safePhone}</p>` : ''}
+              ${safeCompany ? `<p><strong>Entreprise :</strong> ${safeCompany}</p>` : ''}
+              ${projectType ? `<p><strong>Projet :</strong> ${escapeHtml(projectType.label)}</p>` : ''}
+            </div>
+
+            <div style="background-color: #f1f5f9; padding: 20px; border-radius: 8px;">
+              <h3 style="margin-top: 0;">Message :</h3>
+              <p style="white-space: pre-wrap;">${safeMessage}</p>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+              <p style="color: #64748b; font-size: 14px;">
+                Envoyé depuis le formulaire du site ${siteConfig.name}. Répondez directement à cet email pour écrire au client.
+              </p>
+            </div>
+          </div>
+        `,
+      })
+    } catch (error) {
+      console.error('Erreur d’envoi (notification) :', error)
       return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi de l\'email' },
+        { error: 'Erreur lors de l\'envoi du message. Vous pouvez aussi m\'appeler directement.' },
         { status: 500 }
       )
     }
 
     // Email de confirmation automatique (un échec n'invalide pas l'envoi principal)
-    const { error: confirmationError } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [email],
-      subject: `Votre message a bien été reçu - ${siteConfig.name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #B85C2A;">Merci pour votre message !</h2>
+    if (canSendToVisitors()) {
+      try {
+        await sendMail({
+          to: email,
+          subject: `Votre message a bien été reçu - ${siteConfig.name}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #FF3D7F;">Merci pour votre message !</h2>
 
-          <p>Bonjour ${safeName},</p>
+              <p>Bonjour ${safeName},</p>
 
-          <p>J'ai bien reçu votre demande et je vous en remercie.</p>
+              <p>J'ai bien reçu votre demande et je vous en remercie.</p>
 
-          <p>Je l'étudie et je reviens vers vous très vite (${siteConfig.responseTime.toLowerCase()}). Si c'est urgent, vous pouvez aussi m'appeler au ${siteConfig.phone}.</p>
+              <p>Je l'étudie et je reviens vers vous très vite (${siteConfig.responseTime.toLowerCase()}). Si c'est urgent, vous pouvez aussi m'appeler au ${siteConfig.phone}.</p>
 
-          <p>À très bientôt,<br>${siteConfig.owner} — ${siteConfig.name}</p>
+              <p>À très bientôt,<br>${siteConfig.owner} — ${siteConfig.name}</p>
 
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-            <p style="color: #64748b; font-size: 12px;">
-              Cet email est envoyé automatiquement. Merci de ne pas y répondre directement.
-            </p>
-          </div>
-        </div>
-      `,
-    })
-
-    if (confirmationError) {
-      console.error('Erreur Resend (confirmation):', confirmationError)
+              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                <p style="color: #64748b; font-size: 12px;">
+                  Cet email est envoyé automatiquement suite à votre demande sur le site ${siteConfig.name}.
+                </p>
+              </div>
+            </div>
+          `,
+        })
+      } catch (error) {
+        console.error('Erreur d’envoi (confirmation) :', error)
+      }
     }
 
     return NextResponse.json({ success: true })
-
   } catch (error) {
     console.error('Erreur API contact:', error)
     return NextResponse.json(
