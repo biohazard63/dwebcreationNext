@@ -27,7 +27,7 @@ const emptyForm: FormData = {
   website: '',
 }
 
-const labelClass = 'mb-2 block text-sm font-medium text-ink'
+const labelClass = 'mb-2 block text-sm font-medium text-white'
 
 export function ContactForm() {
   const [formData, setFormData] = useState<FormData>(emptyForm)
@@ -78,13 +78,13 @@ export function ContactForm() {
 
   if (submitStatus === 'success') {
     return (
-      <div role="status" className="rounded-2xl border border-line bg-white p-10 text-center">
-        <CheckCircle2 className="mx-auto h-10 w-10 text-copper" aria-hidden="true" />
-        <h2 className="heading-md mt-6">Merci, votre message est bien parti.</h2>
-        <p className="mt-4 text-ink-600">
+      <div role="status" className="glass rounded-3xl p-10 text-center">
+        <CheckCircle2 className="mx-auto h-10 w-10 text-flame" aria-hidden="true" />
+        <h2 className="mt-6 font-grotesk text-3xl font-semibold tracking-tight">Merci, votre message est bien parti.</h2>
+        <p className="mt-4 text-mist">
           Je vous recontacte rapidement. Un email de confirmation vient de vous être envoyé.
         </p>
-        <Button variant="outline" className="mt-8" onClick={() => setSubmitStatus('idle')}>
+        <Button variant="outline-light" className="mt-8" onClick={() => setSubmitStatus('idle')}>
           Envoyer un autre message
         </Button>
       </div>
@@ -92,9 +92,9 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 rounded-2xl border border-line bg-white p-6 sm:p-10">
+    <form onSubmit={handleSubmit} className="glass space-y-6 rounded-3xl p-6 sm:p-10">
       {submitStatus === 'error' && (
-        <div role="alert" className="flex items-start gap-3 rounded-lg bg-red-50 p-4 text-sm text-red-800">
+        <div role="alert" className="flex items-start gap-3 rounded-lg border border-red-400/30 bg-red-500/10 p-4 text-sm text-red-200">
           <AlertCircle className="mt-0.5 h-4 w-4 flex-none" aria-hidden="true" />
           <p>{errorMessage || 'Une erreur est survenue. Veuillez réessayer ou m’appeler directement.'}</p>
         </div>
@@ -134,7 +134,7 @@ export function ContactForm() {
           name="projectType"
           value={formData.projectType}
           onChange={handleChange}
-          className="flex h-12 w-full rounded-lg border border-input bg-white px-4 text-base text-ink focus-visible:border-copper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper/20 focus-visible:ring-offset-0"
+          className="flex h-12 w-full rounded-xl border border-white/10 bg-white/[0.04] px-4 text-base text-white focus-visible:border-flame focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flame/25 focus-visible:ring-offset-0 [&>option]:bg-night"
         >
           <option value="">Choisir…</option>
           {projectTypes.map((type) => (
@@ -172,8 +172,8 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-xs text-stone">* Champs obligatoires. Vos données servent uniquement à vous répondre.</p>
-        <Button type="submit" size="lg" disabled={isSubmitting}>
+        <p className="text-xs text-mist">* Champs obligatoires. Vos données servent uniquement à vous répondre.</p>
+        <Button type="submit" size="lg" disabled={isSubmitting} className="bg-gradient-to-r from-flame via-blush to-violet hover:opacity-90">
           {isSubmitting ? 'Envoi en cours…' : 'Envoyer ma demande'}
           {!isSubmitting && <ArrowRight className="h-4 w-4" aria-hidden="true" />}
         </Button>

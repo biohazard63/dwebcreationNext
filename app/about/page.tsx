@@ -1,5 +1,6 @@
-import { FinalCta, PageHeader, SectionHeading } from '@/components/shared/blocks'
+import { Cta, Heading, PageHeader } from '@/components/shared/blocks'
 import { Reveal } from '@/components/shared/Reveal'
+import { SpotlightCard } from '@/components/home/Spotlight'
 import { pageMetadata } from '@/lib/seo'
 import { siteConfig } from '@/lib/site'
 
@@ -36,17 +37,17 @@ const skills = ['Next.js & React', 'JavaScript / TypeScript', 'HTML & CSS', 'Tai
 
 export default function AboutPage() {
   return (
-    <>
+    <div className="overflow-x-clip">
       <PageHeader
-        eyebrow="À propos"
-        title={<>Bonjour, moi c’est {siteConfig.owner}.</>}
-        intro={`Développeur web indépendant à ${siteConfig.city}, j’aide les artisans, commerçants et indépendants à exister en ligne avec des sites simples, rapides et efficaces.`}
+        chip="À propos"
+        title={<>Bonjour, moi c’est <span className="text-gradient">{siteConfig.owner}</span>.</>}
+        intro={`Développeur web indépendant à ${siteConfig.city}, j’aide les artisans, commerçants et indépendants à exister en ligne avec des sites modernes, rapides et efficaces.`}
       />
 
-      <section className="section">
+      <section className="py-20 sm:py-28">
         <div className="container grid gap-14 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
-          <SectionHeading eyebrow="Ma démarche" title="Un site doit travailler pour vous." />
-          <Reveal className="space-y-6 text-lg leading-relaxed text-ink-600">
+          <Heading chip="Ma démarche" title={<>Un site doit <span className="text-gradient">travailler</span> pour vous.</>} />
+          <Reveal className="space-y-6 text-lg leading-relaxed text-mist lg:pt-16">
             <p>
               Beaucoup de professionnels ont un site qui ne leur rapporte rien, ou n’en ont pas du tout faute
               de temps. Mon rôle est de vous décharger de cette partie : comprendre votre métier, vos clients,
@@ -60,49 +61,52 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="section bg-paper">
+      <section className="py-20 sm:py-28">
         <div className="container">
-          <SectionHeading eyebrow="Ce qui compte pour moi" title="Trois principes, sur chaque projet." />
-          <div className="mt-14 grid gap-10 md:grid-cols-3">
+          <Heading chip="Ce qui compte pour moi" title="Trois principes, sur chaque projet." />
+          <div className="mt-14 grid gap-4 md:grid-cols-3">
             {values.map((value, i) => (
-              <Reveal key={value.title} delay={i * 90} className="border-t border-line pt-8">
-                <h3 className="text-xl font-medium">{value.title}</h3>
-                <p className="mt-3 leading-relaxed text-ink-600">{value.text}</p>
+              <Reveal key={value.title} delay={i * 90} className="h-full">
+                <SpotlightCard className="h-full p-8">
+                  <span className="text-gradient font-grotesk text-5xl font-semibold">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="mt-5 text-xl font-semibold">{value.title}</h3>
+                  <p className="mt-3 leading-relaxed text-mist">{value.text}</p>
+                </SpotlightCard>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="section">
+      <section className="py-20 sm:py-28">
         <div className="container grid gap-14 lg:grid-cols-[1fr_1.3fr] lg:gap-20">
           <div>
-            <SectionHeading eyebrow="Parcours" title="Du code depuis 2019." />
+            <Heading chip="Parcours" title={<>Du code depuis <span className="text-gradient">2019</span>.</>} />
             <Reveal className="mt-10">
               <p className="text-sm font-medium">Outils et technologies</p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {skills.map((skill) => (
-                  <li key={skill} className="rounded-full border border-line px-4 py-1.5 text-sm text-ink-600">
+                  <li key={skill} className="chip text-sm">
                     {skill}
                   </li>
                 ))}
               </ul>
             </Reveal>
           </div>
-          <ol className="border-l border-line">
+          <ol className="relative border-l border-white/10">
             {timeline.map((item, i) => (
               <Reveal as="li" key={item.year} delay={i * 70} className="relative pb-10 pl-8 last:pb-0">
-                <span className="absolute -left-[5px] top-2 h-[9px] w-[9px] rounded-full bg-copper" aria-hidden="true" />
-                <p className="text-sm text-copper-dark">{item.year}</p>
-                <h3 className="mt-1 text-lg font-medium">{item.title}</h3>
-                <p className="mt-1 text-ink-600">{item.text}</p>
+                <span className="absolute -left-[6px] top-1.5 h-3 w-3 rounded-full bg-gradient-to-br from-flame to-blush ring-4 ring-night" aria-hidden="true" />
+                <p className="text-sm text-flame">{item.year}</p>
+                <h3 className="mt-1 text-lg font-semibold">{item.title}</h3>
+                <p className="mt-1 text-mist">{item.text}</p>
               </Reveal>
             ))}
           </ol>
         </div>
       </section>
 
-      <FinalCta title="On en discute ?" />
-    </>
+      <Cta title="On en discute ?" />
+    </div>
   )
 }

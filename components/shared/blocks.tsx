@@ -1,104 +1,92 @@
 import Link from 'next/link'
 import { ArrowRight, Check, Phone } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import { Reveal } from '@/components/shared/Reveal'
-import { siteConfig } from '@/lib/site'
+import { SpotlightCard } from '@/components/home/Spotlight'
 import { faq, offers, steps } from '@/lib/data/offers'
-import { cn } from '@/lib/utils'
+import { siteConfig } from '@/lib/site'
 
-export function SectionHeading({
-  eyebrow,
-  title,
-  intro,
-  align = 'left',
-  dark = false,
-}: {
-  eyebrow: string
-  title: React.ReactNode
-  intro?: string
-  align?: 'left' | 'center'
-  dark?: boolean
-}) {
+export function Heading({ chip, title, intro, center }: { chip: string; title: React.ReactNode; intro?: string; center?: boolean }) {
   return (
-    <Reveal className={cn('max-w-2xl', align === 'center' && 'mx-auto text-center')}>
-      <p className={cn('eyebrow', dark && 'text-copper-light')}>{eyebrow}</p>
-      <h2 className={cn('heading-lg mt-4', dark ? 'text-paper-50' : 'text-ink')}>{title}</h2>
-      {intro && <p className={cn('lead mt-5', dark && 'text-stone-light')}>{intro}</p>}
+    <Reveal className={center ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
+      <p className="chip">{chip}</p>
+      <h2 className="heading-2 mt-6">{title}</h2>
+      {intro && <p className="mt-6 text-lg leading-relaxed text-mist">{intro}</p>}
     </Reveal>
   )
 }
 
-export function PageHeader({
-  eyebrow,
-  title,
-  intro,
-}: {
-  eyebrow: string
-  title: React.ReactNode
-  intro: string
-}) {
+
+export function PageHeader({ chip, title, intro }: { chip: string; title: React.ReactNode; intro: string }) {
   return (
-    <section className="bg-ink pb-20 pt-20 text-paper-50 sm:pb-24 sm:pt-28">
-      <div className="container">
-        <div className="max-w-3xl">
-          <p className="eyebrow text-copper-light">{eyebrow}</p>
-          <h1 className="heading-xl mt-5">{title}</h1>
-          <p className="lead mt-6 max-w-2xl text-stone-light">{intro}</p>
+    <section className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div className="absolute -left-40 -top-48 h-[32rem] w-[32rem] rounded-full bg-violet/20 blur-[140px]" />
+        <div className="absolute -right-40 -top-20 h-[26rem] w-[26rem] rounded-full bg-flame/15 blur-[140px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
+      </div>
+      <div className="container relative pb-16 pt-16 sm:pb-20 sm:pt-24">
+        <div className="max-w-4xl">
+          <p className="chip">{chip}</p>
+          <h1 className="heading-hero mt-7">{title}</h1>
+          <p className="mt-7 max-w-2xl text-lg leading-relaxed text-mist sm:text-xl">{intro}</p>
         </div>
       </div>
     </section>
   )
 }
 
-export function OffersGrid() {
+export function OffersDetailed() {
   return (
-    <div className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line lg:grid-cols-3">
+    <div className="grid gap-4 lg:grid-cols-3">
       {offers.map((offer, i) => (
-        <Reveal key={offer.id} delay={i * 90} className="flex flex-col bg-paper-50 p-8 sm:p-10" as="article">
-          <div id={offer.id} className="scroll-mt-28" />
-          <p className="text-sm text-stone">{offer.forWho}</p>
-          <h3 className="heading-md mt-3">{offer.name}</h3>
-          <p className="mt-4 text-ink-600">{offer.pitch}</p>
-          <ul className="mt-8 space-y-3 border-t border-line pt-8 text-[0.95rem]">
-            {offer.includes.map((item) => (
-              <li key={item} className="flex gap-3">
-                <Check className="mt-0.5 h-4 w-4 flex-none text-copper" aria-hidden="true" />
-                <span>{item}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="mt-auto flex items-center justify-between pt-10">
-            <span className="text-sm text-stone">Sur devis</span>
-            <Link
-              href={`/contact?projet=${offer.id}`}
-              className="group inline-flex items-center gap-2 text-sm font-medium text-copper-dark"
-            >
-              En parler
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-            </Link>
-          </div>
+        <Reveal key={offer.id} delay={i * 90} className="h-full">
+          <SpotlightCard className="flex h-full flex-col p-8">
+            <div id={offer.id} className="scroll-mt-28" />
+            <p className="text-sm text-mist">{offer.forWho}</p>
+            <h3 className="mt-3 font-grotesk text-3xl font-semibold tracking-tight">{offer.name}</h3>
+            <p className="mt-4 text-mist">{offer.pitch}</p>
+            <ul className="mt-8 space-y-3 border-t border-white/10 pt-8 text-[0.95rem]">
+              {offer.includes.map((item) => (
+                <li key={item} className="flex gap-3">
+                  <Check className="mt-0.5 h-4 w-4 flex-none text-flame" aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <div className="mt-auto flex items-center justify-between pt-10">
+              <span className="text-sm text-mist">Sur devis</span>
+              <Link href={`/contact?projet=${offer.id}`} className="group inline-flex items-center gap-2 text-sm font-medium text-white hover:text-flame">
+                En parler
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+            </div>
+          </SpotlightCard>
         </Reveal>
       ))}
     </div>
   )
 }
 
-export function MethodSection() {
+export function Method() {
   return (
-    <section className="section bg-ink text-paper-50">
+    <section className="py-24 sm:py-32">
       <div className="container">
-        <SectionHeading
-          dark
-          eyebrow="Comment ça se passe"
-          title="Une méthode simple, sans jargon."
-          intro="Vous êtes expert de votre métier, je m’occupe du reste. À chaque étape, vous savez où on en est et ce qui vient ensuite."
+        <Heading
+          chip="Comment ça se passe"
+          title={<>Simple, clair, <span className="text-gradient">sans jargon</span>.</>}
+          intro="Vous êtes expert de votre métier, je m’occupe du reste. À chaque étape, vous savez où on en est."
         />
-        <ol className="mt-16 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+        <ol className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((step, i) => (
-            <Reveal as="li" key={step.title} delay={i * 90} className="border-t border-line-dark pt-6">
-              <span className="font-display text-4xl text-copper-light">{String(i + 1).padStart(2, '0')}</span>
-              <h3 className="mt-4 text-lg font-medium">{step.title}</h3>
-              <p className="mt-3 text-[0.95rem] leading-relaxed text-stone-light">{step.text}</p>
+            <Reveal as="li" key={step.title} delay={i * 120} className="relative">
+              <div className="h-px w-full bg-white/10">
+                <div className="step-line h-px w-full bg-gradient-to-r from-flame via-blush to-violet" style={{ transitionDelay: `${i * 150 + 200}ms` }} />
+              </div>
+              <span className="text-gradient mt-8 block font-grotesk text-6xl font-semibold tracking-tight">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
+              <p className="mt-3 leading-relaxed text-mist">{step.text}</p>
             </Reveal>
           ))}
         </ol>
@@ -107,39 +95,32 @@ export function MethodSection() {
   )
 }
 
-export function FaqSection() {
+export function Faq() {
   return (
-    <section className="section">
+    <section className="py-24 sm:py-32">
       <div className="container grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
         <div>
-          <SectionHeading
-            eyebrow="Questions fréquentes"
-            title="Ce que l’on me demande souvent."
-            intro="Une autre question ? Le plus simple est de m’appeler ou de m’écrire."
-          />
+          <Heading chip="Questions fréquentes" title="Vos questions, mes réponses." />
           <Reveal className="mt-8">
-            <a
-              href={siteConfig.phoneHref}
-              className="inline-flex items-center gap-2 font-medium text-copper-dark hover:underline"
-            >
+            <a href={siteConfig.phoneHref} className="inline-flex items-center gap-2 font-medium text-white hover:text-flame">
               <Phone className="h-4 w-4" aria-hidden="true" />
               {siteConfig.phone}
             </a>
           </Reveal>
         </div>
-        <Reveal className="divide-y divide-line border-y border-line">
+        <Reveal className="space-y-3">
           {faq.map((item) => (
-            <details key={item.question} className="group py-6 [&_summary::-webkit-details-marker]:hidden">
-              <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-lg font-medium">
+            <details key={item.question} className="group glass rounded-2xl px-6 py-5 [&_summary::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-medium">
                 {item.question}
                 <span
-                  className="mt-1 flex h-6 w-6 flex-none items-center justify-center rounded-full border border-ink/20 text-sm transition-transform group-open:rotate-45"
+                  className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-white/15 text-lg transition-all group-open:rotate-45 group-open:border-transparent group-open:bg-gradient-to-br group-open:from-flame group-open:to-blush"
                   aria-hidden="true"
                 >
                   +
                 </span>
               </summary>
-              <p className="mt-4 max-w-2xl leading-relaxed text-ink-600">{item.answer}</p>
+              <p className="mt-4 max-w-2xl leading-relaxed text-mist">{item.answer}</p>
             </details>
           ))}
         </Reveal>
@@ -148,39 +129,50 @@ export function FaqSection() {
   )
 }
 
-export function FinalCta({
-  title = 'Parlons de votre projet.',
-  text = 'Un appel de quelques minutes suffit pour savoir ce dont vous avez besoin. Devis gratuit, sans engagement.',
+export function Cta({
+  title = 'Prêt à être trouvé ?',
+  text = 'Un appel de quelques minutes suffit pour savoir ce dont vous avez besoin.',
 }: {
   title?: string
   text?: string
 }) {
   return (
-    <section className="bg-paper py-20 sm:py-28">
+    <section className="pb-24 sm:pb-32">
       <div className="container">
-        <Reveal className="relative overflow-hidden rounded-3xl bg-ink px-6 py-16 text-center text-paper-50 sm:px-16 sm:py-20">
-          <div
-            className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[36rem] -translate-x-1/2 rounded-full bg-copper/25 blur-3xl"
-            aria-hidden="true"
-          />
+        <Reveal className="relative overflow-hidden rounded-[2.5rem] border border-white/10 px-6 py-20 text-center sm:px-16 sm:py-28">
+          <div className="grad-animate absolute inset-0 bg-gradient-to-br from-flame/40 via-blush/30 to-violet/40" aria-hidden="true" />
+          <div className="absolute inset-0 bg-night/40" aria-hidden="true" />
           <div className="relative">
-            <h2 className="heading-lg mx-auto max-w-2xl">{title}</h2>
-            <p className="lead mx-auto mt-6 max-w-xl text-stone-light">{text}</p>
+            <h2 className="mx-auto max-w-3xl font-grotesk text-5xl font-semibold leading-[0.95] tracking-[-0.035em] sm:text-7xl">
+              {title}
+            </h2>
+            <p className="mx-auto mt-6 max-w-xl text-lg text-white/80">
+              {text}
+            </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Button asChild size="lg">
-                <Link href="/contact">
-                  Demander un devis gratuit
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button asChild size="lg" variant="outline-light">
-                <a href={siteConfig.phoneHref}>
-                  <Phone className="h-4 w-4" aria-hidden="true" />
-                  {siteConfig.phone}
-                </a>
-              </Button>
+              <Link
+                href="/contact"
+                className="group inline-flex h-14 items-center gap-2 rounded-full bg-white px-8 font-medium text-night transition-transform hover:scale-[1.03]"
+              >
+                Demander un devis gratuit
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
+              </Link>
+              <a
+                href={siteConfig.phoneHref}
+                className="inline-flex h-14 items-center gap-2 rounded-full border border-white/30 px-8 font-medium text-white hover:bg-white/10"
+              >
+                <Phone className="h-4 w-4" aria-hidden="true" />
+                {siteConfig.phone}
+              </a>
             </div>
-            <p className="mt-6 text-sm text-stone-light">{siteConfig.responseTime}</p>
+            <ul className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-2 text-sm text-white/80">
+              {['Devis gratuit', 'Sans engagement', siteConfig.responseTime].map((item) => (
+                <li key={item} className="flex items-center gap-2">
+                  <Check className="h-4 w-4" aria-hidden="true" />
+                  {item}
+                </li>
+              ))}
+            </ul>
           </div>
         </Reveal>
       </div>

@@ -5,17 +5,15 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-copper focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-flame focus-visible:ring-offset-2 focus-visible:ring-offset-night disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       variant: {
-        default: "bg-copper text-white hover:bg-copper-dark",
-        dark: "bg-ink text-paper-50 hover:bg-ink-700",
-        light: "bg-paper-50 text-ink hover:bg-white",
-        outline: "border border-ink/20 text-ink hover:border-ink hover:bg-ink hover:text-paper-50",
-        "outline-light": "border border-white/25 text-paper-50 hover:border-white hover:bg-white hover:text-ink",
-        ghost: "text-ink hover:bg-ink/5",
-        link: "text-copper-dark underline-offset-4 hover:underline",
+        default: "bg-gradient-to-r from-flame via-blush to-violet text-white hover:opacity-90",
+        light: "bg-white text-night hover:bg-white/90",
+        "outline-light": "border border-white/25 text-white hover:border-white/60 hover:bg-white/5",
+        ghost: "text-white hover:bg-white/10",
+        link: "text-flame underline-offset-4 hover:underline",
       },
       size: {
         default: "h-11 px-6",

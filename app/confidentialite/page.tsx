@@ -12,13 +12,13 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHeader
-        eyebrow="Informations"
+        chip="Informations"
         title="Politique de confidentialité"
         intro="Vos données ne servent qu’à une chose : répondre à votre demande."
       />
-      <section className="section">
+      <section className="pb-24 sm:pb-32">
         <div className="container">
-          <div className="prose prose-lg max-w-3xl">
+          <div className="prose prose-lg prose-invert max-w-3xl prose-headings:font-grotesk prose-headings:font-semibold prose-a:text-flame">
             <h2>Données collectées</h2>
             <p>
               Lorsque vous utilisez le formulaire de contact, les informations que vous saisissez sont collectées :

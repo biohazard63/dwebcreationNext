@@ -1,21 +1,12 @@
 import Link from 'next/link'
-import { ArrowRight, ArrowUpRight, Check, MapPin, MessageCircle, Phone, Search, Smartphone } from 'lucide-react'
+import { ArrowUpRight, MapPin, MessageCircle, Search, Smartphone } from 'lucide-react'
 import { Reveal } from '@/components/shared/Reveal'
+import { Heading } from '@/components/shared/blocks'
 import { SpotlightCard } from '@/components/home/Spotlight'
-import { faq, offers, sectors, steps } from '@/lib/data/offers'
+import { offers, sectors } from '@/lib/data/offers'
 import { projects } from '@/lib/data/projects'
 import { testimonials } from '@/lib/data/testimonials'
 import { siteConfig } from '@/lib/site'
-
-function Heading({ chip, title, intro, center }: { chip: string; title: React.ReactNode; intro?: string; center?: boolean }) {
-  return (
-    <Reveal className={center ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}>
-      <p className="chip">{chip}</p>
-      <h2 className="heading-2 mt-6">{title}</h2>
-      {intro && <p className="mt-6 text-lg leading-relaxed text-mist">{intro}</p>}
-    </Reveal>
-  )
-}
 
 export function Marquee() {
   const items = [...sectors.map((s) => s.name), 'Indépendants', 'Commerçants', 'Artisans']
@@ -167,34 +158,6 @@ export function Bento() {
   )
 }
 
-export function Method() {
-  return (
-    <section className="py-24 sm:py-32">
-      <div className="container">
-        <Heading
-          chip="Comment ça se passe"
-          title={<>Simple, clair, <span className="text-gradient">sans jargon</span>.</>}
-          intro="Vous êtes expert de votre métier, je m’occupe du reste. À chaque étape, vous savez où on en est."
-        />
-        <ol className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((step, i) => (
-            <Reveal as="li" key={step.title} delay={i * 120} className="relative">
-              <div className="h-px w-full bg-white/10">
-                <div className="step-line h-px w-full bg-gradient-to-r from-flame via-blush to-violet" style={{ transitionDelay: `${i * 150 + 200}ms` }} />
-              </div>
-              <span className="text-gradient mt-8 block font-grotesk text-6xl font-semibold tracking-tight">
-                {String(i + 1).padStart(2, '0')}
-              </span>
-              <h3 className="mt-4 text-xl font-semibold">{step.title}</h3>
-              <p className="mt-3 leading-relaxed text-mist">{step.text}</p>
-            </Reveal>
-          ))}
-        </ol>
-      </div>
-    </section>
-  )
-}
-
 // Affichées uniquement lorsque de vrais projets / avis sont renseignés
 export function Projects() {
   if (projects.length === 0) return null
@@ -238,85 +201,6 @@ export function Testimonials() {
             </Reveal>
           ))}
         </div>
-      </div>
-    </section>
-  )
-}
-
-export function Faq() {
-  return (
-    <section className="py-24 sm:py-32">
-      <div className="container grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
-        <div>
-          <Heading chip="Questions fréquentes" title="Vos questions, mes réponses." />
-          <Reveal className="mt-8">
-            <a href={siteConfig.phoneHref} className="inline-flex items-center gap-2 font-medium text-white hover:text-flame">
-              <Phone className="h-4 w-4" aria-hidden="true" />
-              {siteConfig.phone}
-            </a>
-          </Reveal>
-        </div>
-        <Reveal className="space-y-3">
-          {faq.map((item) => (
-            <details key={item.question} className="group glass rounded-2xl px-6 py-5 [&_summary::-webkit-details-marker]:hidden">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-medium">
-                {item.question}
-                <span
-                  className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-white/15 text-lg transition-all group-open:rotate-45 group-open:border-transparent group-open:bg-gradient-to-br group-open:from-flame group-open:to-blush"
-                  aria-hidden="true"
-                >
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 max-w-2xl leading-relaxed text-mist">{item.answer}</p>
-            </details>
-          ))}
-        </Reveal>
-      </div>
-    </section>
-  )
-}
-
-export function Cta() {
-  return (
-    <section className="pb-24 sm:pb-32">
-      <div className="container">
-        <Reveal className="relative overflow-hidden rounded-[2.5rem] border border-white/10 px-6 py-20 text-center sm:px-16 sm:py-28">
-          <div className="grad-animate absolute inset-0 bg-gradient-to-br from-flame/40 via-blush/30 to-violet/40" aria-hidden="true" />
-          <div className="absolute inset-0 bg-night/40" aria-hidden="true" />
-          <div className="relative">
-            <h2 className="mx-auto max-w-3xl font-grotesk text-5xl font-semibold leading-[0.95] tracking-[-0.035em] sm:text-7xl">
-              Prêt à être trouvé ?
-            </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg text-white/80">
-              Un appel de quelques minutes suffit pour savoir ce dont vous avez besoin.
-            </p>
-            <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href="/contact"
-                className="group inline-flex h-14 items-center gap-2 rounded-full bg-white px-8 font-medium text-night transition-transform hover:scale-[1.03]"
-              >
-                Demander un devis gratuit
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
-              </Link>
-              <a
-                href={siteConfig.phoneHref}
-                className="inline-flex h-14 items-center gap-2 rounded-full border border-white/30 px-8 font-medium text-white hover:bg-white/10"
-              >
-                <Phone className="h-4 w-4" aria-hidden="true" />
-                {siteConfig.phone}
-              </a>
-            </div>
-            <ul className="mt-10 flex flex-wrap justify-center gap-x-7 gap-y-2 text-sm text-white/80">
-              {['Devis gratuit', 'Sans engagement', siteConfig.responseTime].map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <Check className="h-4 w-4" aria-hidden="true" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Reveal>
       </div>
     </section>
   )

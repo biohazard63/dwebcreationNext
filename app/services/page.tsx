@@ -1,5 +1,6 @@
-import { FaqSection, FinalCta, JsonLd, MethodSection, OffersGrid, PageHeader, SectionHeading } from '@/components/shared/blocks'
+import { Cta, Faq, Heading, JsonLd, Method, OffersDetailed, PageHeader } from '@/components/shared/blocks'
 import { Reveal } from '@/components/shared/Reveal'
+import { SpotlightCard } from '@/components/home/Spotlight'
 import { faqJsonLd, pageMetadata } from '@/lib/seo'
 import { siteConfig } from '@/lib/site'
 
@@ -26,40 +27,39 @@ const extras = [
 
 export default function ServicesPage() {
   return (
-    <>
+    <div className="overflow-x-clip">
       <JsonLd data={faqJsonLd()} />
       <PageHeader
-        eyebrow="Services"
-        title="Des formules simples, adaptées à votre métier."
+        chip="Services"
+        title={<>Des formules <span className="text-gradient">simples</span>, adaptées à votre métier.</>}
         intro="Que vous partiez de zéro ou que votre site actuel ne vous apporte rien, il existe une formule pour vous. Chacune est chiffrée sur devis, gratuitement et sans engagement."
       />
 
-      <section className="section">
+      <section className="pb-24 sm:pb-32">
         <div className="container">
-          <OffersGrid />
+          <OffersDetailed />
         </div>
       </section>
 
-      <section className="section bg-paper">
+      <section className="py-24 sm:py-32">
         <div className="container">
-          <SectionHeading
-            eyebrow="En complément"
-            title="Ce que je peux faire en plus."
-          />
-          <div className="mt-14 grid gap-10 md:grid-cols-3">
+          <Heading chip="En complément" title={<>Ce que je peux faire <span className="text-gradient">en plus</span>.</>} />
+          <div className="mt-14 grid gap-4 md:grid-cols-3">
             {extras.map((item, i) => (
-              <Reveal key={item.title} delay={i * 90} className="border-t border-line pt-8">
-                <h3 className="text-xl font-medium">{item.title}</h3>
-                <p className="mt-3 leading-relaxed text-ink-600">{item.text}</p>
+              <Reveal key={item.title} delay={i * 90} className="h-full">
+                <SpotlightCard className="h-full p-8">
+                  <h3 className="text-xl font-semibold">{item.title}</h3>
+                  <p className="mt-3 leading-relaxed text-mist">{item.text}</p>
+                </SpotlightCard>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      <MethodSection />
-      <FaqSection />
-      <FinalCta />
-    </>
+      <Method />
+      <Faq />
+      <Cta />
+    </div>
   )
 }

@@ -82,7 +82,7 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
 
       {open && (
         <div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Menu" className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-ink/60" onClick={() => setOpen(false)} />
+          <div className="absolute inset-0 bg-black/60" onClick={() => setOpen(false)} />
           <div className="absolute inset-y-0 right-0 flex w-full max-w-sm flex-col bg-night px-6 py-5 text-white">
             <div className="flex items-center justify-between">
               <Logo />

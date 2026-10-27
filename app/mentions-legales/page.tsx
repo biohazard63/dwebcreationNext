@@ -12,10 +12,10 @@ export default function LegalPage() {
   const { legal } = siteConfig
   return (
     <>
-      <PageHeader eyebrow="Informations" title="Mentions légales" intro={`Informations légales relatives au site ${siteConfig.name}.`} />
-      <section className="section">
+      <PageHeader chip="Informations" title="Mentions légales" intro={`Informations légales relatives au site ${siteConfig.name}.`} />
+      <section className="pb-24 sm:pb-32">
         <div className="container">
-          <div className="prose prose-lg max-w-3xl">
+          <div className="prose prose-lg prose-invert max-w-3xl prose-headings:font-grotesk prose-headings:font-semibold prose-a:text-flame">
             <h2>Éditeur du site</h2>
             <p>
               {legal.publisher}
