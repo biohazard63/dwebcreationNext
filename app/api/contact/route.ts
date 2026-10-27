@@ -7,17 +7,52 @@ const TO_EMAIL = process.env.CONTACT_TO_EMAIL || siteConfig.email
 
 const MAX_LENGTHS = { name: 100, email: 254, phone: 30, company: 100, message: 5000 }
 
+// Taille maximale acceptée pour une demande (les champs font au plus ~5,5 Ko)
+const MAX_BODY_BYTES = 16 * 1024
+
 // Limitation simple du nombre d'envois par IP (mémoire de l'instance)
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const RATE_LIMIT_MAX = 5
 const submissions = new Map<string, number[]>()
+
+// Plafond global d'emails de confirmation par heure : évite qu'un robot utilise
+// le formulaire pour faire envoyer des emails à des inconnus depuis votre adresse
+const CONFIRMATION_WINDOW_MS = 60 * 60 * 1000
+const CONFIRMATION_MAX = 30
+let confirmations: number[] = []
 
 function isRateLimited(ip: string) {
   const now = Date.now()
   const recent = (submissions.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS)
   recent.push(now)
   submissions.set(ip, recent)
+  // Nettoyage pour que la mémoire ne grossisse pas indéfiniment
+  if (submissions.size > 5000) {
+    for (const [key, times] of submissions) {
+      if (times.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) submissions.delete(key)
+    }
+  }
   return recent.length > RATE_LIMIT_MAX
+}
+
+function canSendConfirmation() {
+  const now = Date.now()
+  confirmations = confirmations.filter((t) => now - t < CONFIRMATION_WINDOW_MS)
+  if (confirmations.length >= CONFIRMATION_MAX) return false
+  confirmations.push(now)
+  return true
+}
+
+// La demande doit venir du site lui-même (et pas d'un formulaire caché sur un autre site)
+function isSameOrigin(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  if (!origin) return false
+  try {
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+    return new URL(origin).host === host
+  } catch {
+    return false
+  }
 }
 
 function escapeHtml(value: string) {
@@ -43,6 +78,19 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (!isSameOrigin(request)) {
+      return NextResponse.json({ error: 'Requête non autorisée' }, { status: 403 })
+    }
+
+    // Seul le format JSON envoyé par le formulaire est accepté
+    if (!request.headers.get('content-type')?.toLowerCase().startsWith('application/json')) {
+      return NextResponse.json({ error: 'Format non pris en charge' }, { status: 415 })
+    }
+
+    if (Number(request.headers.get('content-length') || 0) > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: 'Requête trop volumineuse' }, { status: 413 })
+    }
+
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
     if (isRateLimited(ip)) {
       return NextResponse.json(
@@ -51,8 +99,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json().catch(() => null)
-    if (!body || typeof body !== 'object') {
+    // Lecture du corps avec une limite de taille (au cas où Content-Length serait absent ou faux)
+    const raw = await request.text()
+    if (Buffer.byteLength(raw) > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: 'Requête trop volumineuse' }, { status: 413 })
+    }
+    let body: Record<string, unknown> | null = null
+    try {
+      body = JSON.parse(raw)
+    } catch {
+      body = null
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
       return NextResponse.json({ error: 'Requête invalide' }, { status: 400 })
     }
 
@@ -146,7 +204,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Email de confirmation automatique (un échec n'invalide pas l'envoi principal)
-    if (canSendToVisitors()) {
+    if (canSendToVisitors() && canSendConfirmation()) {
       try {
         await sendMail({
           to: email,
@@ -155,7 +213,7 @@ export async function POST(request: NextRequest) {
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
               <h2 style="color: #FF3D7F;">Merci pour votre message !</h2>
 
-              <p>Bonjour ${safeName},</p>
+              <p>Bonjour,</p>
 
               <p>J'ai bien reçu votre demande et je vous en remercie.</p>
 

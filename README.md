@@ -121,6 +121,21 @@ npm run test:email
 ```
 Cette commande vérifie les fichiers `.env` (nom, encodage — un fichier enregistré en UTF-16 par PowerShell est corrigé automatiquement), les variables lues (sans afficher le mot de passe), la connexion à Gmail, puis envoie un email de test.
 
+## 🔒 Sécurité
+
+Protections en place :
+- **En-têtes HTTP** : Content-Security-Policy, HSTS, anti-iframe, nosniff, Referrer-Policy, Permissions-Policy, X-Powered-By masqué.
+- **Formulaire** : validation et longueur maximale de chaque champ, taille de requête limitée (16 Ko), données échappées dans les emails, retours à la ligne bloqués (pas d'injection d'en-têtes), champ piège anti-robots.
+- **Anti-abus** : demandes acceptées uniquement depuis le site lui-même et en JSON (pas de formulaire caché sur un autre site), 5 demandes / 10 min par IP, 30 emails de confirmation / heure au maximum, aucun contenu saisi par le visiteur dans l'email de confirmation.
+- **Secrets** : uniquement dans `.env` / `.env.local` (exclus de Git) ou dans les variables d'environnement Vercel.
+
+Tester (pendant que le site tourne) :
+```bash
+npm run test:security                                   # site local sur http://localhost:3000
+BASE_URL=https://votre-site.fr npm run test:security    # site en ligne
+```
+Aucun email n'est envoyé par ces tests.
+
 ## 🚀 Déploiement
 
 ### Vercel (Recommandé)

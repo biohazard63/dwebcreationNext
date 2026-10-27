@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "type-check": "tsc --noEmit",
     "postbuild": "next-sitemap",
-    "test:email": "node scripts/test-email.mjs"
+    "test:email": "node scripts/test-email.mjs",
+    "test:security": "node scripts/test-security.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.5.0",
