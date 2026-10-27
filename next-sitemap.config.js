@@ -1,6 +1,6 @@
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: process.env.SITE_URL || 'https://dwebcreation.com',
+  siteUrl: (process.env.SITE_URL || 'https://dwebcreation.com').replace(/\/+$/, ''),
   generateRobotsTxt: true,
   generateIndexSitemap: false,
   changefreq: 'weekly',

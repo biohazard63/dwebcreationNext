@@ -12,7 +12,8 @@
     "type-check": "tsc --noEmit",
     "postbuild": "next-sitemap",
     "test:email": "node scripts/test-email.mjs",
-    "test:security": "node scripts/test-security.mjs"
+    "test:security": "node scripts/test-security.mjs",
+    "test:seo": "node scripts/test-seo.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.5.0",

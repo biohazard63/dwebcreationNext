@@ -4,6 +4,8 @@ import { Reveal } from '@/components/shared/Reveal'
 import { Heading } from '@/components/shared/blocks'
 import { SpotlightCard } from '@/components/home/Spotlight'
 import { offers, sectors } from '@/lib/data/offers'
+import { metiers } from '@/lib/data/metiers'
+import { articles } from '@/lib/data/articles'
 import { projects } from '@/lib/data/projects'
 import { testimonials } from '@/lib/data/testimonials'
 import { siteConfig } from '@/lib/site'
@@ -230,6 +232,46 @@ export function SimulatorTeaser() {
               <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
             </span>
           </Link>
+        </Reveal>
+      </div>
+    </section>
+  )
+}
+
+// Liens vers les pages métier et les conseils : utile aux visiteurs et au référencement
+export function ExploreLinks() {
+  return (
+    <section className="py-16 sm:py-20">
+      <div className="container grid gap-12 lg:grid-cols-2">
+        <Reveal>
+          <p className="chip">Par métier</p>
+          <h2 className="mt-5 font-grotesk text-3xl font-semibold tracking-tight">Un site pensé pour votre activité</h2>
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {metiers.map((m) => (
+              <li key={m.slug}>
+                <Link
+                  href={`/site-internet/${m.slug}`}
+                  className="inline-flex rounded-full border border-white/10 px-4 py-2 text-sm transition-colors hover:border-flame/60 hover:text-flame"
+                >
+                  Site pour {m.plural}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+        <Reveal delay={90}>
+          <p className="chip">Conseils</p>
+          <h2 className="mt-5 font-grotesk text-3xl font-semibold tracking-tight">À lire avant de vous lancer</h2>
+          <ul className="mt-6 divide-y divide-white/10 border-y border-white/10">
+            {articles.slice(0, 3).map((a) => (
+              <li key={a.slug}>
+                <Link href={`/conseils/${a.slug}`} className="group flex items-center justify-between gap-4 py-4 font-medium hover:text-flame">
+                  {a.title}
+                  <ArrowUpRight className="h-4 w-4 flex-none text-mist group-hover:text-flame" aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>
         </Reveal>
       </div>
     </section>

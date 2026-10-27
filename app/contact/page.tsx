@@ -21,6 +21,7 @@ export default function ContactPage() {
   return (
     <>
       <PageHeader
+        breadcrumbs={[{ name: 'Contact', href: '/contact' }]}
         chip="Contact"
         title={<>Parlons de <span className="text-gradient">votre projet</span>.</>}
         intro="Décrivez votre activité en quelques lignes ou appelez-moi directement. Le devis est gratuit et sans engagement."

@@ -70,14 +70,6 @@ function asTrimmedString(value: unknown) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!mailProvider()) {
-      console.error('Envoi d’emails non configuré : renseigner SMTP_USER / SMTP_PASS ou RESEND_API_KEY')
-      return NextResponse.json(
-        { error: 'Le service d\'envoi est temporairement indisponible' },
-        { status: 503 }
-      )
-    }
-
     if (!isSameOrigin(request)) {
       return NextResponse.json({ error: 'Requête non autorisée' }, { status: 403 })
     }
@@ -153,6 +145,15 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'Adresse email invalide' },
         { status: 400 }
+      )
+    }
+
+    // Vérifié après la validation : une demande invalide est toujours refusée, même sans configuration email
+    if (!mailProvider()) {
+      console.error('Envoi d’emails non configuré : renseigner SMTP_USER / SMTP_PASS ou RESEND_API_KEY')
+      return NextResponse.json(
+        { error: 'Le service d\'envoi est temporairement indisponible' },
+        { status: 503 }
       )
     }
 

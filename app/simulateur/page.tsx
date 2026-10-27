@@ -5,7 +5,7 @@ import { pageMetadata } from '@/lib/seo'
 import { siteConfig } from '@/lib/site'
 
 export const metadata = pageMetadata({
-  title: 'Simulateur de projet — Quel site pour votre activité ?',
+  title: 'Simulateur : quel site pour votre activité ?',
   description: `Répondez à 6 questions et découvrez la formule de site internet adaptée à votre activité. Gratuit, sans inscription. ${siteConfig.name}, ${siteConfig.city}.`,
   path: '/simulateur',
 })
@@ -20,6 +20,7 @@ export default function SimulatorPage() {
   return (
     <div className="overflow-x-clip">
       <PageHeader
+        breadcrumbs={[{ name: 'Simulateur', href: '/simulateur' }]}
         chip="Simulateur"
         title={<>Quel site pour <span className="text-gradient">votre activité</span> ?</>}
         intro="Répondez à quelques questions : je vous indique la formule la plus adaptée et vous pouvez demander votre devis en un clic."

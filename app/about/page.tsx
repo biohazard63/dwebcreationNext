@@ -39,6 +39,7 @@ export default function AboutPage() {
   return (
     <div className="overflow-x-clip">
       <PageHeader
+        breadcrumbs={[{ name: 'À propos', href: '/about' }]}
         chip="À propos"
         title={<>Bonjour, moi c’est <span className="text-gradient">{siteConfig.owner}</span>.</>}
         intro={`Développeur web indépendant à ${siteConfig.city}, j’aide les artisans, commerçants et indépendants à exister en ligne avec des sites modernes, rapides et efficaces.`}

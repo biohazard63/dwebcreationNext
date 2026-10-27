@@ -59,8 +59,10 @@ export function pageMetadata({
   description: string
   path: string
 }): Metadata {
+  // Google coupe les titres au-delà de ~60 caractères : on retire alors le suffixe du site
+  const fits = `${title} | ${siteConfig.name}`.length <= 60
   return {
-    title,
+    title: fits ? title : { absolute: title },
     description,
     alternates: { canonical: path },
     openGraph: {
@@ -74,10 +76,36 @@ export function pageMetadata({
   }
 }
 
+// Identifiant unique de l'entreprise, réutilisé par les services pour la désigner
+function businessId() {
+  return `${siteConfig.url}/#entreprise`
+}
+
+const areaServed = [
+  { '@type': 'City', name: siteConfig.city },
+  { '@type': 'AdministrativeArea', name: siteConfig.region },
+]
+
+// Une formule ou un service proposé, rattaché à l'entreprise
+export function serviceJsonLd({ name, description, path, audience }: { name: string; description: string; path: string; audience?: string }) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name,
+    serviceType: 'Création de site internet',
+    description,
+    url: `${siteConfig.url}${path}`,
+    provider: { '@id': businessId() },
+    areaServed,
+    ...(audience && { audience: { '@type': 'Audience', audienceType: audience } }),
+  }
+}
+
 export function localBusinessJsonLd() {
   return {
     '@context': 'https://schema.org',
     '@type': 'ProfessionalService',
+    '@id': businessId(),
     name: siteConfig.name,
     description: siteConfig.description,
     url: siteConfig.url,
@@ -89,7 +117,7 @@ export function localBusinessJsonLd() {
       addressRegion: siteConfig.region,
       addressCountry: siteConfig.country,
     },
-    areaServed: [siteConfig.city, siteConfig.region, 'Auvergne'],
+    areaServed,
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: siteConfig.hoursSpec.days,

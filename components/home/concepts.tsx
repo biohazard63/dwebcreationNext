@@ -71,11 +71,11 @@ export function ConceptMenuiserie({ mobile }: ConceptProps) {
       <header className={cn('grid gap-8', mobile ? 'px-5 pb-8' : 'grid-cols-[1.1fr_1fr] items-center px-12 pb-12 pt-4')}>
         <div>
           <p className="text-xs uppercase tracking-[0.2em] text-[#A0673A]">Menuisier · Clermont-Ferrand</p>
-          <h3 className={cn('mt-4 font-display leading-[0.95]', mobile ? 'text-5xl' : 'text-7xl')}>
+          <p className={cn('mt-4 font-display leading-[0.95]', mobile ? 'text-5xl' : 'text-7xl')}>
             Le bois,
             <br />
             <em className="text-[#A0673A]">sur mesure.</em>
-          </h3>
+          </p>
           <p className="mt-5 max-w-sm text-[15px] leading-relaxed opacity-75">
             Cuisines, escaliers et agencements fabriqués dans notre atelier, posés chez vous.
           </p>
@@ -154,11 +154,11 @@ export function ConceptRestaurant({ mobile }: ConceptProps) {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,#D9B26F55,transparent_50%),radial-gradient(circle_at_10%_90%,#3C7A5A88,transparent_55%)]" />
         <div className="relative">
           <p className="text-sm text-[#D9B26F]">Bistrot de saison · Ouvert du mardi au samedi</p>
-          <h3 className={cn('mt-3 font-semibold leading-[0.95] tracking-tight', mobile ? 'text-5xl' : 'text-7xl')}>
+          <p className={cn('mt-3 font-semibold leading-[0.95] tracking-tight', mobile ? 'text-5xl' : 'text-7xl')}>
             Cuisine du marché,
             <br />
             produits d’ici.
-          </h3>
+          </p>
           <button
             type="button"
             onClick={() => setBooked((b) => !b)}
@@ -216,11 +216,11 @@ export function ConceptCoiffeur({ mobile }: ConceptProps) {
       />
       <div className={cn('grid gap-8', mobile ? 'px-5 pb-10' : 'grid-cols-[1fr_1.1fr] items-start px-12 pb-12 pt-2')}>
         <div>
-          <h3 className={cn('font-semibold leading-[0.95] tracking-tight', mobile ? 'text-5xl' : 'text-6xl')}>
+          <p className={cn('font-semibold leading-[0.95] tracking-tight', mobile ? 'text-5xl' : 'text-6xl')}>
             Votre style,
             <br />
             <span className="text-[#E0457B]">réservé en 30 s.</span>
-          </h3>
+          </p>
           <p className="mt-5 max-w-sm text-[15px] leading-relaxed opacity-70">
             Choisissez une prestation et un créneau, on s’occupe du reste.
           </p>
@@ -293,11 +293,11 @@ export function ConceptFleuriste({ mobile }: ConceptProps) {
         </div>
       )}
       <header className={cn(mobile ? 'px-5' : 'px-12 pt-2')}>
-        <h3 className={cn('font-display leading-[0.95]', mobile ? 'text-5xl' : 'text-7xl')}>
+        <p className={cn('font-display leading-[0.95]', mobile ? 'text-5xl' : 'text-7xl')}>
           Des fleurs fraîches,
           <br />
           <em className="text-[#3B6D4A]">livrées aujourd’hui.</em>
-        </h3>
+        </p>
       </header>
       <section className={cn('grid gap-4', mobile ? 'grid-cols-2 px-5 py-8' : 'grid-cols-4 px-12 py-10')}>
         {products.map((p) => {

@@ -1,12 +1,13 @@
 import { Cta, Faq, Heading, JsonLd, Method, OffersDetailed, PageHeader } from '@/components/shared/blocks'
 import { Reveal } from '@/components/shared/Reveal'
 import { SpotlightCard } from '@/components/home/Spotlight'
-import { faqJsonLd, pageMetadata } from '@/lib/seo'
+import { faqJsonLd, pageMetadata, serviceJsonLd } from '@/lib/seo'
+import { offers } from '@/lib/data/offers'
 import { siteConfig } from '@/lib/site'
 
 export const metadata = pageMetadata({
   title: `Création de site internet à ${siteConfig.city} — Formules`,
-  description: `Site vitrine, réservation en ligne, boutique ou refonte : des formules claires pour les artisans, commerçants et indépendants de ${siteConfig.city} et du ${siteConfig.region}. Devis gratuit.`,
+  description: `Site vitrine, réservation, boutique en ligne ou refonte : des formules claires pour artisans et commerçants à ${siteConfig.city}. Devis gratuit.`,
   path: '/services',
 })
 
@@ -29,7 +30,14 @@ export default function ServicesPage() {
   return (
     <div className="overflow-x-clip">
       <JsonLd data={faqJsonLd()} />
+      {offers.map((offer) => (
+        <JsonLd
+          key={offer.id}
+          data={serviceJsonLd({ name: offer.name, description: offer.pitch, path: `/services#${offer.id}`, audience: offer.forWho })}
+        />
+      ))}
       <PageHeader
+        breadcrumbs={[{ name: 'Services', href: '/services' }]}
         chip="Services"
         title={<>Des formules <span className="text-gradient">simples</span>, adaptées à votre métier.</>}
         intro="Que vous partiez de zéro ou que votre site actuel ne vous apporte rien, il existe une formule pour vous. Chacune est chiffrée sur devis, gratuitement et sans engagement."

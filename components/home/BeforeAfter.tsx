@@ -8,7 +8,7 @@ export function BeforeAfter() {
   const [pos, setPos] = useState(50)
 
   return (
-    <section className="py-24 sm:py-32">
+    <section id="avant-apres" className="scroll-mt-20 py-24 sm:py-32">
       <div className="container">
         <Reveal className="mx-auto max-w-3xl text-center">
           <p className="chip">Refonte</p>
@@ -107,11 +107,11 @@ function NewSite() {
         <div className="mt-auto grid items-end gap-6 sm:grid-cols-[1.3fr_1fr]">
           <div>
             <p className="text-xs uppercase tracking-[0.2em] text-[#E8A15C] sm:text-sm">Artisan boulanger</p>
-            <h3 className="mt-3 text-4xl font-semibold leading-[0.95] tracking-tight sm:text-6xl">
+            <p className="mt-3 text-4xl font-semibold leading-[0.95] tracking-tight sm:text-6xl">
               Le bon pain,
               <br />
               cuit chaque matin.
-            </h3>
+            </p>
             <div className="mt-6 flex flex-wrap gap-3 text-sm">
               <span className="rounded-full bg-[#E8A15C] px-5 py-2.5 font-medium text-[#1C1410]">Commander en ligne</span>
               <span className="rounded-full border border-snow/25 px-5 py-2.5">Horaires & accès</span>

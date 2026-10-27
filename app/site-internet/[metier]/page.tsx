@@ -8,7 +8,7 @@ import { SpotlightCard } from '@/components/home/Spotlight'
 import { getDemo } from '@/lib/data/demos'
 import { getMetier, metiers } from '@/lib/data/metiers'
 import { offers } from '@/lib/data/offers'
-import { pageMetadata } from '@/lib/seo'
+import { pageMetadata, serviceJsonLd } from '@/lib/seo'
 import { siteConfig } from '@/lib/site'
 
 type Props = { params: Promise<{ metier: string }> }
@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: Props) {
   const metier = getMetier((await params).metier)
   if (!metier) return {}
   return pageMetadata({
-    title: `Site internet pour ${metier.plural} à ${siteConfig.city}`,
-    description: `${metier.headline} Création de sites internet pour ${metier.plural} à ${siteConfig.city} et dans le ${siteConfig.region}. Devis gratuit.`,
+    title: `Site internet pour ${metier.short} à ${siteConfig.city}`,
+    description: `${metier.headline} Création de site internet pour ${metier.short} à ${siteConfig.city} et dans le ${siteConfig.region}. Devis gratuit.`,
     path: `/site-internet/${metier.slug}`,
   })
 }
@@ -45,7 +45,16 @@ export default async function MetierPage({ params }: Props) {
   return (
     <div className="overflow-x-clip">
       <JsonLd data={faqLd} />
+      <JsonLd
+        data={serviceJsonLd({
+          name: `Création de site internet pour ${metier.plural}`,
+          description: metier.intro,
+          path: `/site-internet/${metier.slug}`,
+          audience: metier.examples,
+        })}
+      />
       <PageHeader
+        breadcrumbs={[{ name: 'Par métier', href: '/site-internet' }, { name: metier.name, href: `/site-internet/${metier.slug}` }]}
         chip={`${metier.name} · ${siteConfig.city}`}
         title={<>Site internet pour <span className="text-gradient">{metier.plural}</span> à {siteConfig.city}</>}
         intro={metier.intro}

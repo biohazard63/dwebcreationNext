@@ -1,7 +1,7 @@
 import { Hero } from '@/components/home/Hero'
 import { Demos } from '@/components/home/Demos'
 import { BeforeAfter } from '@/components/home/BeforeAfter'
-import { Bento, Marquee, Projects, SimulatorTeaser, Testimonials } from '@/components/home/sections'
+import { Bento, ExploreLinks, Marquee, Projects, SimulatorTeaser, Testimonials } from '@/components/home/sections'
 import { Cta, Faq, JsonLd, Method } from '@/components/shared/blocks'
 import { faqJsonLd } from '@/lib/seo'
 
@@ -18,6 +18,7 @@ export default function HomePage() {
       <Method />
       <Projects />
       <Testimonials />
+      <ExploreLinks />
       <Faq />
       <Cta />
     </div>

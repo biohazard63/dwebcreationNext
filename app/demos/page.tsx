@@ -17,6 +17,7 @@ export default function DemosPage() {
   return (
     <div className="overflow-x-clip">
       <PageHeader
+        breadcrumbs={[{ name: 'Démos', href: '/demos' }]}
         chip="Démos"
         title={<>Essayez avant de <span className="text-gradient">choisir</span>.</>}
         intro="Des concepts de sites interactifs, chacun pensé pour un métier. Cliquez, filtrez, réservez : c’est exactement ce que vivront vos clients."

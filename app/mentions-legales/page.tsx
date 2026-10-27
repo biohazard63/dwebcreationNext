@@ -4,7 +4,7 @@ import { siteConfig } from '@/lib/site'
 
 export const metadata = pageMetadata({
   title: 'Mentions légales',
-  description: `Mentions légales du site ${siteConfig.name}.`,
+  description: `Mentions légales du site ${siteConfig.name} : éditeur, hébergeur, propriété intellectuelle et données personnelles.`,
   path: '/mentions-legales',
 })
 
@@ -12,7 +12,8 @@ export default function LegalPage() {
   const { legal } = siteConfig
   return (
     <>
-      <PageHeader chip="Informations" title="Mentions légales" intro={`Informations légales relatives au site ${siteConfig.name}.`} />
+      <PageHeader
+        breadcrumbs={[{ name: 'Mentions légales', href: '/mentions-legales' }]} chip="Informations" title="Mentions légales" intro={`Informations légales relatives au site ${siteConfig.name}.`} />
       <section className="pb-24 sm:pb-32">
         <div className="container">
           <div className="prose prose-lg max-w-3xl dark:prose-invert prose-headings:font-grotesk prose-headings:font-semibold prose-a:text-flame">

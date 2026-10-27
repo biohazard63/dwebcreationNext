@@ -16,7 +16,55 @@ export function Heading({ chip, title, intro, center }: { chip: string; title: R
 }
 
 
-export function PageHeader({ chip, title, intro }: { chip: string; title: React.ReactNode; intro: string }) {
+export type Crumb = { name: string; href: string }
+
+// Fil d'Ariane visible + données structurées BreadcrumbList pour Google
+export function Breadcrumbs({ items }: { items: Crumb[] }) {
+  const all = [{ name: 'Accueil', href: '/' }, ...items]
+  const data = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: all.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      item: `${siteConfig.url}${item.href === '/' ? '' : item.href}`,
+    })),
+  }
+  return (
+    <>
+      <JsonLd data={data} />
+      <nav aria-label="Fil d’Ariane" className="text-sm text-mist">
+        <ol className="flex flex-wrap items-center gap-x-2 gap-y-1">
+          {all.map((item, i) => (
+            <li key={item.href} className="flex items-center gap-2">
+              {i > 0 && <span aria-hidden="true">›</span>}
+              {i === all.length - 1 ? (
+                <span aria-current="page" className="text-white">{item.name}</span>
+              ) : (
+                <Link href={item.href} className="transition-colors hover:text-white">
+                  {item.name}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ol>
+      </nav>
+    </>
+  )
+}
+
+export function PageHeader({
+  chip,
+  title,
+  intro,
+  breadcrumbs,
+}: {
+  chip: string
+  title: React.ReactNode
+  intro: string
+  breadcrumbs?: Crumb[]
+}) {
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
@@ -24,8 +72,9 @@ export function PageHeader({ chip, title, intro }: { chip: string; title: React.
         <div className="absolute -right-40 -top-20 h-[26rem] w-[26rem] rounded-full bg-flame/15 blur-[140px]" />
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--fg)/0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--fg)/0.05)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
       </div>
-      <div className="container relative pb-16 pt-16 sm:pb-20 sm:pt-24">
-        <div className="max-w-4xl">
+      <div className="container relative pb-16 pt-10 sm:pb-20 sm:pt-14">
+        {breadcrumbs && <Breadcrumbs items={breadcrumbs} />}
+        <div className="mt-10 max-w-4xl sm:mt-12">
           <p className="chip">{chip}</p>
           <h1 className="heading-hero mt-7">{title}</h1>
           <p className="mt-7 max-w-2xl text-lg leading-relaxed text-mist sm:text-xl">{intro}</p>

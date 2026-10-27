@@ -21,6 +21,7 @@ export default function PortfolioPage() {
   return (
     <>
       <PageHeader
+        breadcrumbs={[{ name: 'Réalisations', href: '/portfolio' }]}
         chip="Réalisations"
         title={<>Des sites qui <span className="text-gradient">travaillent</span> pour leurs propriétaires.</>}
         intro="Chaque projet part d’un métier, d’une clientèle et d’un objectif précis."

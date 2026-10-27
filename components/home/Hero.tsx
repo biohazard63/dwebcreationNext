@@ -62,16 +62,19 @@ export function Hero() {
 
       <div className="container relative grid gap-16 pb-24 pt-14 sm:pt-20 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-12 lg:pb-32 lg:pt-24">
         <div>
-          <p className="chip">
-            <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-flame to-blush" />
-            Développeur web indépendant · {siteConfig.city}
-          </p>
-          <h1 className="heading-hero mt-7">
-            Des sites qui font <span className="text-gradient grad-animate">briller</span> votre métier.
+          {/* Le titre principal contient la recherche visée (création de sites + ville) puis l'accroche */}
+          <h1>
+            <span className="chip">
+              <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-flame to-blush" aria-hidden="true" />
+              Création de sites internet à {siteConfig.city}
+            </span>
+            <span className="heading-hero mt-7 block">
+              Des sites qui font <span className="text-gradient grad-animate">briller</span> votre métier.
+            </span>
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-relaxed text-mist sm:text-xl">
-            Artisans, commerçants, indépendants : je conçois des sites modernes, rapides et bien référencés
-            qui transforment vos visiteurs en clients.
+            Développeur web indépendant, je conçois pour les artisans, commerçants et indépendants du{' '}
+            {siteConfig.region} des sites modernes, rapides et bien référencés qui transforment vos visiteurs en clients.
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">

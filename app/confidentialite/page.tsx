@@ -12,6 +12,7 @@ export default function PrivacyPage() {
   return (
     <>
       <PageHeader
+        breadcrumbs={[{ name: 'Confidentialité', href: '/confidentialite' }]}
         chip="Informations"
         title="Politique de confidentialité"
         intro="Vos données ne servent qu’à une chose : répondre à votre demande."

@@ -2,6 +2,8 @@
 export interface Metier {
   slug: string
   name: string
+  // Forme courte utilisée dans les titres Google (« Site internet pour … »)
+  short: string
   plural: string
   headline: string
   intro: string
@@ -17,6 +19,7 @@ export const metiers: Metier[] = [
   {
     slug: 'artisan-batiment',
     name: 'Artisan du bâtiment',
+    short: 'artisan',
     plural: 'artisans du bâtiment',
     headline: 'Un site qui remplit votre carnet de chantiers.',
     intro:
@@ -55,6 +58,7 @@ export const metiers: Metier[] = [
   {
     slug: 'restaurant',
     name: 'Restaurant',
+    short: 'restaurant',
     plural: 'restaurants et cafés',
     headline: 'Donnez faim avant même d’ouvrir la porte.',
     intro:
@@ -93,6 +97,7 @@ export const metiers: Metier[] = [
   {
     slug: 'commerce',
     name: 'Commerce de proximité',
+    short: 'commerce',
     plural: 'commerces de proximité',
     headline: 'Votre boutique, ouverte aussi en ligne.',
     intro:
@@ -131,6 +136,7 @@ export const metiers: Metier[] = [
   {
     slug: 'beaute-bien-etre',
     name: 'Beauté & bien-être',
+    short: 'salon de beauté',
     plural: 'professionnels de la beauté et du bien-être',
     headline: 'Des rendez-vous pris même quand vous travaillez.',
     intro:
@@ -168,6 +174,7 @@ export const metiers: Metier[] = [
   {
     slug: 'profession-liberale',
     name: 'Profession libérale',
+    short: 'profession libérale',
     plural: 'professions libérales',
     headline: 'Un site sobre qui inspire confiance.',
     intro:
@@ -205,6 +212,7 @@ export const metiers: Metier[] = [
   {
     slug: 'association',
     name: 'Association & club',
+    short: 'association',
     plural: 'associations et clubs',
     headline: 'Rassemblez vos membres au même endroit.',
     intro:

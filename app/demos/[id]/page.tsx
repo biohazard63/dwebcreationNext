@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ArrowLeft, ArrowRight, Check } from 'lucide-react'
+import { ArrowRight, Check } from 'lucide-react'
 import { DemoDevices, type DemoId } from '@/components/demos/DemoDevices'
 import { Cta, PageHeader } from '@/components/shared/blocks'
 import { Reveal } from '@/components/shared/Reveal'
@@ -37,13 +37,8 @@ export default async function DemoPage({ params }: Props) {
 
   return (
     <div className="overflow-x-clip">
-      <div className="container pt-10">
-        <Link href="/demos" className="inline-flex items-center gap-2 text-sm text-mist hover:text-white">
-          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
-          Toutes les démos
-        </Link>
-      </div>
       <PageHeader
+        breadcrumbs={[{ name: 'Démos', href: '/demos' }, { name: demo.label, href: `/demos/${demo.id}` }]}
         chip={`Concept · ${demo.label}`}
         title={<>{demo.business}</>}
         intro={demo.intro}

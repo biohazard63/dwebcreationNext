@@ -86,6 +86,7 @@ dwebcreationNext/
 | `lib/data/demos.ts` | Textes des démos (les mini-sites sont dans `components/home/concepts.tsx`) |
 | `lib/data/simulator.ts` | Questions du simulateur et **tarifs indicatifs** (`pricing`, vide = pas de prix affiché) |
 | `lib/data/projects.ts` | Vraies réalisations : la page et la section apparaissent dès qu'il y en a une |
+| `lib/data/articles.ts` | Articles de la rubrique Conseils |
 | `lib/data/testimonials.ts` | Vrais avis clients : la section apparaît dès qu'il y en a un |
 
 ### Couleurs et thème
@@ -120,6 +121,17 @@ Si SMTP et Resend sont configurés tous les deux, SMTP est utilisé.
 npm run test:email
 ```
 Cette commande vérifie les fichiers `.env` (nom, encodage — un fichier enregistré en UTF-16 par PowerShell est corrigé automatiquement), les variables lues (sans afficher le mot de passe), la connexion à Gmail, puis envoie un email de test.
+
+## 🔎 Référencement (SEO)
+
+En place : titres et descriptions uniques par page (raccourcis automatiquement pour Google), adresses canoniques, sitemap et robots.txt, fil d'Ariane, données structurées (entreprise locale, services, FAQ, fil d'Ariane, articles), pages par métier, rubrique Conseils, maillage interne.
+
+- **Nom de domaine** : renseignez `SITE_URL=https://votre-domaine.fr` (Vercel → Environment Variables) ; toutes les adresses du site, du sitemap et des données structurées l'utilisent.
+- **Nouvel article** : ajoutez-le dans `lib/data/articles.ts` (page, sitemap et liens générés automatiquement).
+- **Audit** (après `npm run build`, site lancé) :
+  ```bash
+  npm run test:seo
+  ```
 
 ## 🔒 Sécurité
 

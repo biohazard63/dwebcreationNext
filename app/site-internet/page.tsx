@@ -17,6 +17,7 @@ export default function MetiersPage() {
   return (
     <div className="overflow-x-clip">
       <PageHeader
+        breadcrumbs={[{ name: 'Par métier', href: '/site-internet' }]}
         chip="Par métier"
         title={<>Un site pensé pour <span className="text-gradient">votre métier</span>.</>}
         intro={`Chaque activité a ses besoins. Découvrez ce que votre site doit contenir pour attirer des clients à ${siteConfig.city} et dans le ${siteConfig.region}.`}
