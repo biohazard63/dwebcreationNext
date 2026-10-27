@@ -12,6 +12,7 @@ export const siteConfig = {
 }
 
 export const defaultMetadata: Metadata = {
+  metadataBase: new URL(siteConfig.url),
   title: {
     default: siteConfig.name,
     template: `%s | ${siteConfig.name}`,
@@ -62,7 +63,9 @@ export const defaultMetadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "your-google-verification-code",
-  },
+  ...(process.env.GOOGLE_SITE_VERIFICATION && {
+    verification: {
+      google: process.env.GOOGLE_SITE_VERIFICATION,
+    },
+  }),
 }

@@ -73,7 +73,7 @@ export function AboutCTA() {
                 </div>
                 <h3 className="font-semibold text-gray-900 dark:text-white">Accompagnement personnalisé</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-300 text-center">
-                  Suivi complet de votre projet jusqu'à la livraison
+                  Suivi complet de votre projet jusqu’à la livraison
                 </p>
               </div>
             </div>

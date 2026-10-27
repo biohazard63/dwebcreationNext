@@ -36,7 +36,7 @@ export function ContactInfo() {
           Informations de contact
         </h2>
         <p className="text-muted-foreground">
-          N'hésitez pas à nous contacter par email, téléphone ou en remplissant le formulaire. 
+          N’hésitez pas à nous contacter par email, téléphone ou en remplissant le formulaire. 
           Nous répondons généralement dans les 24h.
         </p>
       </div>
@@ -68,7 +68,7 @@ export function ContactInfo() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <MessageSquare className="h-5 w-5" />
-            Besoin d'une réponse rapide ?
+            Besoin d’une réponse rapide ?
           </CardTitle>
           <CardDescription>
             Pour les urgences ou les projets complexes, nous proposons également des consultations 

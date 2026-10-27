@@ -1,5 +1,5 @@
 import { Star, Linkedin, CheckCircle } from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
+import { CardContent } from '@/components/ui/card'
 import { FadeUp, StaggerContainer, StaggerItem, AnimatedCard } from '@/components/motion'
 import { testimonials } from '@/lib/data/testimonials'
 
@@ -26,7 +26,7 @@ export function HomeTestimonials() {
 
         <StaggerContainer staggerDelay={0.1}>
           <div className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {testimonials.map((testimonial, index) => (
+            {testimonials.map((testimonial) => (
               <StaggerItem key={testimonial.name}>
                 <AnimatedCard className="group bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-all duration-500">
                   <CardContent className="p-6">
@@ -46,7 +46,7 @@ export function HomeTestimonials() {
 
                     {/* Témoignage */}
                     <blockquote className="text-gray-700 dark:text-gray-300 mb-6 italic">
-                      "{testimonial.content}"
+                      “{testimonial.content}”
                     </blockquote>
 
                     {/* Informations client */}
@@ -60,7 +60,9 @@ export function HomeTestimonials() {
                             <h4 className="font-semibold text-gray-900 dark:text-white">
                               {testimonial.name}
                             </h4>
-                            <CheckCircle className="h-4 w-4 text-green-500" title="Client vérifié" />
+                            <span title="Client vérifié">
+                              <CheckCircle className="h-4 w-4 text-green-500" aria-label="Client vérifié" />
+                            </span>
                           </div>
                           <p className="text-sm text-gray-600 dark:text-gray-400">
                             {testimonial.role} chez {testimonial.company}
@@ -76,6 +78,7 @@ export function HomeTestimonials() {
                           rel="noopener noreferrer"
                           className="text-gray-400 hover:text-orange-500 dark:hover:text-orange-400 transition-colors duration-300"
                           title="Voir le profil LinkedIn"
+                          aria-label={`Profil LinkedIn de ${testimonial.name}`}
                         >
                           <Linkedin className="h-5 w-5" />
                         </a>

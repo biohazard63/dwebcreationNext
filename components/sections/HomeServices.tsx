@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { ArrowRight, Code, Palette, ShoppingCart, Globe, Smartphone, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { FadeUp, StaggerContainer, StaggerItem, AnimatedCard } from '@/components/motion'
 
 const services = [
@@ -102,7 +102,7 @@ export function HomeServices() {
 
         <StaggerContainer staggerDelay={0.1}>
           <div className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service, index) => (
+            {services.map((service) => (
               <StaggerItem key={service.title}>
                 <AnimatedCard className="group bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 transition-all duration-500">
                   <CardHeader>

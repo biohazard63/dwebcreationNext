@@ -22,7 +22,7 @@ export function HomeTrustBar() {
                 Clients satisfaits :
               </span>
               <div className="flex items-center space-x-4">
-                {clients.slice(0, 4).map((client, index) => (
+                {clients.slice(0, 4).map((client) => (
                   <div
                     key={client.name}
                     className="flex items-center justify-center w-12 h-12 rounded-lg bg-white dark:bg-gray-700 shadow-sm border border-gray-200 dark:border-gray-600 text-2xl"
