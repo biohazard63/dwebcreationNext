@@ -15,8 +15,5 @@ module.exports = {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    additionalSitemaps: [
-      'https://dwebcreation.com/sitemap.xml',
-    ],
   },
 }

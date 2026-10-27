@@ -33,7 +33,7 @@ export default function BlogPage() {
           <h3>Développement Frontend</h3>
           <p>
             React, Next.js, TypeScript, Tailwind CSS et les dernières innovations 
-            en matière d'interfaces utilisateur.
+            en matière d’interfaces utilisateur.
           </p>
           
           <h3>Performance Web</h3>
@@ -50,7 +50,7 @@ export default function BlogPage() {
           
           <h3>UX/UI Design</h3>
           <p>
-            Design d'interface, expérience utilisateur, accessibilité et 
+            Design d’interface, expérience utilisateur, accessibilité et 
             tendances du design web.
           </p>
           

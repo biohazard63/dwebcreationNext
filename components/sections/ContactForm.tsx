@@ -12,6 +12,7 @@ interface FormData {
   email: string
   company: string
   message: string
+  website: string
 }
 
 export function ContactForm() {
@@ -19,15 +20,18 @@ export function ContactForm() {
     name: '',
     email: '',
     company: '',
-    message: ''
+    message: '',
+    website: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
     setSubmitStatus('idle')
+    setErrorMessage('')
 
     try {
       const response = await fetch('/api/contact', {
@@ -40,11 +44,13 @@ export function ContactForm() {
 
       if (response.ok) {
         setSubmitStatus('success')
-        setFormData({ name: '', email: '', company: '', message: '' })
+        setFormData({ name: '', email: '', company: '', message: '', website: '' })
       } else {
+        const data = await response.json().catch(() => null)
+        setErrorMessage(data?.error || '')
         setSubmitStatus('error')
       }
-    } catch (error) {
+    } catch {
       setSubmitStatus('error')
     } finally {
       setIsSubmitting(false)
@@ -66,20 +72,33 @@ export function ContactForm() {
       </CardHeader>
       <CardContent>
         {submitStatus === 'success' && (
-          <div className="mb-6 flex items-center gap-2 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+          <div role="status" className="mb-6 flex items-center gap-2 rounded-lg bg-green-50 p-4 text-green-800 dark:bg-green-900/20 dark:text-green-400">
             <CheckCircle className="h-5 w-5" />
             <p>Message envoyé avec succès ! Nous vous répondrons rapidement.</p>
           </div>
         )}
 
         {submitStatus === 'error' && (
-          <div className="mb-6 flex items-center gap-2 rounded-lg bg-red-50 p-4 text-red-800 dark:bg-red-900/20 dark:text-red-400">
+          <div role="alert" className="mb-6 flex items-center gap-2 rounded-lg bg-red-50 p-4 text-red-800 dark:bg-red-900/20 dark:text-red-400">
             <AlertCircle className="h-5 w-5" />
-            <p>Une erreur est survenue. Veuillez réessayer ou nous contacter directement.</p>
+            <p>{errorMessage || 'Une erreur est survenue. Veuillez réessayer ou nous contacter directement.'}</p>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Champ piège anti-spam, invisible pour les visiteurs */}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="website">Site web</label>
+            <input
+              id="website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={formData.website}
+              onChange={handleChange}
+            />
+          </div>
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
@@ -90,6 +109,8 @@ export function ContactForm() {
                 name="name"
                 type="text"
                 required
+                maxLength={100}
+                autoComplete="name"
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Votre nom"
@@ -104,6 +125,8 @@ export function ContactForm() {
                 name="email"
                 type="email"
                 required
+                maxLength={254}
+                autoComplete="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="votre@email.com"
@@ -119,6 +142,8 @@ export function ContactForm() {
               id="company"
               name="company"
               type="text"
+              maxLength={100}
+              autoComplete="organization"
               value={formData.company}
               onChange={handleChange}
               placeholder="Nom de votre entreprise"
@@ -133,6 +158,7 @@ export function ContactForm() {
               id="message"
               name="message"
               required
+              maxLength={5000}
               value={formData.message}
               onChange={handleChange}
               placeholder="Décrivez votre projet..."

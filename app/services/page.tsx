@@ -24,7 +24,7 @@ export default function ServicesPage() {
           <p>
             Chez DWebCreation, nous proposons une gamme complète de services de développement web 
             pour vous accompagner dans tous vos projets digitaux. De la conception à la mise en ligne, 
-            en passant par la maintenance et l'optimisation, nous sommes là pour vous.
+            en passant par la maintenance et l’optimisation, nous sommes là pour vous.
           </p>
           
           <h2>Nos prestations principales</h2>
@@ -44,7 +44,7 @@ export default function ServicesPage() {
           
           <h3>Applications Web</h3>
           <p>
-            Création d'applications web sur mesure pour automatiser vos processus, 
+            Création d’applications web sur mesure pour automatiser vos processus, 
             gérer vos données et améliorer votre productivité.
           </p>
           

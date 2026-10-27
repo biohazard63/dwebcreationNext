@@ -28,7 +28,7 @@ export default function PortfolioPage() {
             solutions web innovantes et performantes.
           </p>
           
-          <h2>Nos domaines d'expertise</h2>
+          <h2>Nos domaines d’expertise</h2>
           
           <h3>E-commerce</h3>
           <p>

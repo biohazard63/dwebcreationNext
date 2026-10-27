@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X, Moon, Sun } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 
 const navigation = [
   { name: 'Accueil', href: '/' },
@@ -20,30 +19,10 @@ export function Header() {
   const [isDarkMode, setIsDarkMode] = useState(false)
   const [mounted, setMounted] = useState(false)
 
-  // Détecter la préférence utilisateur au chargement
+  // Le thème est appliqué avant l'hydratation par le script de app/layout.tsx
   useEffect(() => {
     setMounted(true)
-    
-    // Vérifier si l'utilisateur a déjà une préférence sauvegardée
-    const savedTheme = localStorage.getItem('theme')
-    
-    if (savedTheme) {
-      // Utiliser la préférence sauvegardée
-      if (savedTheme === 'dark') {
-        setIsDarkMode(true)
-        document.documentElement.classList.add('dark')
-      } else {
-        setIsDarkMode(false)
-        document.documentElement.classList.remove('dark')
-      }
-    } else {
-      // Détecter la préférence système
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-      setIsDarkMode(prefersDark)
-      if (prefersDark) {
-        document.documentElement.classList.add('dark')
-      }
-    }
+    setIsDarkMode(document.documentElement.classList.contains('dark'))
   }, [])
 
   const toggleDarkMode = () => {
@@ -76,6 +55,8 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setMobileMenuOpen(true)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-menu"
           >
             <Menu className="h-6 w-6" />
             <span className="sr-only">Ouvrir le menu</span>
@@ -107,7 +88,7 @@ export function Header() {
               ) : (
                 <Moon className="h-5 w-5" />
               )}
-              <span className="sr-only">Toggle dark mode</span>
+              <span className="sr-only">{isDarkMode ? 'Activer le mode clair' : 'Activer le mode sombre'}</span>
             </Button>
           )}
           <Button asChild className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white border-0">
@@ -118,8 +99,8 @@ export function Header() {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden">
-          <div className="fixed inset-0 z-50" />
+        <div className="lg:hidden" id="mobile-menu" role="dialog" aria-modal="true">
+          <div className="fixed inset-0 z-50" onClick={() => setMobileMenuOpen(false)} />
           <div className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-background px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
             <div className="flex items-center justify-between">
               <Link href="/" className="-m-1.5 p-1.5 flex items-center space-x-2">
