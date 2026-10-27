@@ -6,7 +6,8 @@ module.exports = {
   changefreq: 'weekly',
   priority: 0.7,
   sitemapSize: 5000,
-  exclude: ['/admin/*', '/api/*'],
+  // /portfolio reste hors sitemap tant qu'aucune réalisation n'est publiée (page en noindex)
+  exclude: ['/admin/*', '/api/*', '/opengraph-image', '/icon.svg', '/portfolio'],
   robotsTxtOptions: {
     policies: [
       {

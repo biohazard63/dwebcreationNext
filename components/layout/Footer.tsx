@@ -2,12 +2,13 @@ import Link from 'next/link'
 import { Logo } from '@/components/layout/Logo'
 import { siteConfig } from '@/lib/site'
 import { offers } from '@/lib/data/offers'
+import { metiers } from '@/lib/data/metiers'
 
 export function Footer({ links }: { links: { name: string; href: string }[] }) {
   return (
     <footer className="border-t border-white/10 bg-night pb-28 pt-20 text-white lg:pb-12">
       <div className="container">
-        <div className="grid gap-12 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
           <div>
             <Logo />
             <p className="mt-6 max-w-sm leading-relaxed text-mist">
@@ -23,6 +24,19 @@ export function Footer({ links }: { links: { name: string; href: string }[] }) {
                 <li key={offer.id}>
                   <Link href={`/services#${offer.id}`} className="text-mist transition-colors hover:text-white">
                     {offer.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-sm font-medium text-white">Par métier</h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              {metiers.map((m) => (
+                <li key={m.slug}>
+                  <Link href={`/site-internet/${m.slug}`} className="text-mist transition-colors hover:text-white">
+                    {m.name}
                   </Link>
                 </li>
               ))}

@@ -32,7 +32,7 @@ export const siteConfig = {
 
 export const navigation = [
   { name: 'Services', href: '/services' },
-  { name: 'Démos', href: '/#demos' },
+  { name: 'Démos', href: '/demos' },
   { name: 'Simulateur', href: '/simulateur' },
   { name: 'Réalisations', href: '/portfolio' },
   { name: 'À propos', href: '/about' },
