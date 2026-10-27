@@ -3,103 +3,72 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 25 95% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 25 95% 53%;
-    --radius: 0.5rem;
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 25 95% 53%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 25 95% 53%;
-  }
-}
-
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    @apply bg-paper-50 text-ink;
+  }
+
+  ::selection {
+    @apply bg-copper text-white;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-copper ring-offset-2;
   }
 }
 
 @layer components {
-  .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  .section {
+    @apply py-20 sm:py-28;
   }
-  
-  .section-padding {
-    @apply py-16 sm:py-24;
+
+  .eyebrow {
+    @apply text-xs font-medium uppercase tracking-eyebrow text-copper;
   }
-  
-  .gradient-text {
-    @apply bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent;
+
+  .heading-xl {
+    @apply font-display text-[2.6rem] leading-[1.05] tracking-tight sm:text-6xl lg:text-7xl;
   }
-  
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+
+  .heading-lg {
+    @apply font-display text-4xl leading-[1.1] tracking-tight sm:text-5xl;
+  }
+
+  .heading-md {
+    @apply font-display text-2xl leading-tight sm:text-3xl;
+  }
+
+  .lead {
+    @apply text-lg leading-relaxed text-stone sm:text-xl;
   }
 }
 
-@layer utilities {
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-  }
-  
-  .animation-delay-400 {
-    animation-delay: 0.4s;
-  }
-  
-  .animation-delay-600 {
-    animation-delay: 0.6s;
-  }
+/* Apparition douce au défilement : uniquement si JavaScript est actif */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
-@keyframes fadeInUp {
-  to {
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .js .reveal {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
+    transition: none;
   }
 }

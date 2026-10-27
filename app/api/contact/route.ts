@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { Resend } from 'resend'
+import { siteConfig } from '@/lib/site'
+import { projectTypes } from '@/lib/data/contact'
 
-const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || 'DWebCreation <contact@dwebcreation.com>'
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'contact@dwebcreation.com'
+// L'adresse d'expédition doit appartenir à un domaine vérifié dans Resend
+const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || `${siteConfig.name} <contact@dwebcreation.com>`
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL || siteConfig.email
 
-const MAX_LENGTHS = { name: 100, email: 254, company: 100, message: 5000 }
+const MAX_LENGTHS = { name: 100, email: 254, phone: 30, company: 100, message: 5000 }
 
 // Limitation simple du nombre d'envois par IP (mémoire de l'instance)
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
@@ -62,8 +65,10 @@ export async function POST(request: NextRequest) {
 
     const name = asTrimmedString(body.name)
     const email = asTrimmedString(body.email)
+    const phone = asTrimmedString(body.phone)
     const company = asTrimmedString(body.company)
     const message = asTrimmedString(body.message)
+    const projectType = projectTypes.find((p) => p.value === asTrimmedString(body.projectType))
 
     // Validation basique
     if (!name || !email || !message) {
@@ -76,6 +81,7 @@ export async function POST(request: NextRequest) {
     if (
       name.length > MAX_LENGTHS.name ||
       email.length > MAX_LENGTHS.email ||
+      phone.length > MAX_LENGTHS.phone ||
       company.length > MAX_LENGTHS.company ||
       message.length > MAX_LENGTHS.message
     ) {
@@ -97,6 +103,7 @@ export async function POST(request: NextRequest) {
     const resend = new Resend(process.env.RESEND_API_KEY)
     const safeName = escapeHtml(name)
     const safeEmail = escapeHtml(email)
+    const safePhone = escapeHtml(phone)
     const safeCompany = escapeHtml(company)
     const safeMessage = escapeHtml(message)
     const subjectName = name.replace(/[\r\n]+/g, ' ')
@@ -109,13 +116,15 @@ export async function POST(request: NextRequest) {
       subject: `Nouveau message de contact - ${subjectName}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Nouveau message de contact</h2>
+          <h2 style="color: #B85C2A;">Nouvelle demande de contact</h2>
           
           <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
             <h3 style="margin-top: 0;">Informations du contact :</h3>
             <p><strong>Nom :</strong> ${safeName}</p>
             <p><strong>Email :</strong> ${safeEmail}</p>
+            ${safePhone ? `<p><strong>Téléphone :</strong> ${safePhone}</p>` : ''}
             ${safeCompany ? `<p><strong>Entreprise :</strong> ${safeCompany}</p>` : ''}
+            ${projectType ? `<p><strong>Projet :</strong> ${escapeHtml(projectType.label)}</p>` : ''}
           </div>
           
           <div style="background-color: #f1f5f9; padding: 20px; border-radius: 8px;">
@@ -125,7 +134,7 @@ export async function POST(request: NextRequest) {
           
           <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
             <p style="color: #64748b; font-size: 14px;">
-              Ce message a été envoyé depuis le formulaire de contact du site DWebCreation.
+              Ce message a été envoyé depuis le formulaire de contact du site ${siteConfig.name}.
             </p>
           </div>
         </div>
@@ -144,21 +153,19 @@ export async function POST(request: NextRequest) {
     const { error: confirmationError } = await resend.emails.send({
       from: FROM_EMAIL,
       to: [email],
-      subject: 'Confirmation de votre message - DWebCreation',
+      subject: `Votre message a bien été reçu - ${siteConfig.name}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Merci pour votre message !</h2>
-          
+          <h2 style="color: #B85C2A;">Merci pour votre message !</h2>
+
           <p>Bonjour ${safeName},</p>
-          
-          <p>Nous avons bien reçu votre message et nous vous remercions de nous avoir contactés.</p>
-          
-          <p>Notre équipe va étudier votre demande et vous répondra dans les plus brefs délais (généralement sous 24h).</p>
-          
-          <p>En attendant, n'hésitez pas à consulter notre <a href="https://dwebcreation.com/portfolio" style="color: #2563eb;">portfolio</a> pour découvrir nos réalisations.</p>
-          
-          <p>Cordialement,<br>L'équipe DWebCreation</p>
-          
+
+          <p>J'ai bien reçu votre demande et je vous en remercie.</p>
+
+          <p>Je l'étudie et je reviens vers vous très vite (${siteConfig.responseTime.toLowerCase()}). Si c'est urgent, vous pouvez aussi m'appeler au ${siteConfig.phone}.</p>
+
+          <p>À très bientôt,<br>${siteConfig.owner} — ${siteConfig.name}</p>
+
           <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
             <p style="color: #64748b; font-size: 12px;">
               Cet email est envoyé automatiquement. Merci de ne pas y répondre directement.

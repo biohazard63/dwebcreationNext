@@ -1,29 +1,39 @@
-import { Metadata } from 'next'
-import { HomeHero } from '@/components/sections/HomeHero'
-import { HomeTrustBar } from '@/components/sections/HomeTrustBar'
-import { HomeServices } from '@/components/sections/HomeServices'
-import { HomePortfolio } from '@/components/sections/HomePortfolio'
-import { HomeTestimonials } from '@/components/sections/HomeTestimonials'
-import { HomeCTA } from '@/components/sections/HomeCTA'
-import { StickyCTA } from '@/components/ui/sticky-cta'
-import { generateMetadata } from '@/lib/utils'
-
-export const metadata: Metadata = generateMetadata({
-  title: "DWebCreation - Agence Web Moderne",
-  description: "Agence web spécialisée dans la création de sites web modernes et performants. Développement sur mesure avec Next.js, React et TypeScript.",
-  url: "https://dwebcreation.com",
-})
+import { Hero } from '@/components/home/Hero'
+import {
+  CommitmentsSection,
+  ProblemSection,
+  ProjectsSection,
+  SectorsSection,
+  TestimonialsSection,
+} from '@/components/home/sections'
+import { FaqSection, FinalCta, JsonLd, MethodSection, OffersGrid, SectionHeading } from '@/components/shared/blocks'
+import { faqJsonLd } from '@/lib/seo'
 
 export default function HomePage() {
   return (
     <>
-      <HomeHero />
-      <HomeTrustBar />
-      <HomeServices />
-      <HomePortfolio />
-      <HomeTestimonials />
-      <HomeCTA />
-      <StickyCTA />
+      <JsonLd data={faqJsonLd()} />
+      <Hero />
+      <ProblemSection />
+      <section className="section pt-0">
+        <div className="container">
+          <SectionHeading
+            eyebrow="Formules"
+            title="Trois façons de vous rendre visible."
+            intro="Chaque formule est adaptée à votre activité et chiffrée précisément après un premier échange gratuit."
+          />
+          <div className="mt-16">
+            <OffersGrid />
+          </div>
+        </div>
+      </section>
+      <SectorsSection />
+      <MethodSection />
+      <ProjectsSection />
+      <CommitmentsSection />
+      <TestimonialsSection />
+      <FaqSection />
+      <FinalCta />
     </>
   )
 }

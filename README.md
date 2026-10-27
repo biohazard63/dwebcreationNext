@@ -34,8 +34,8 @@ Site web professionnel pour une agence de développement web moderne, construit 
    ```env
    SITE_URL=https://dwebcreation.com
    RESEND_API_KEY=your_resend_api_key_here
-   CONTACT_FROM_EMAIL="DWebCreation <contact@dwebcreation.com>"
-   CONTACT_TO_EMAIL=contact@dwebcreation.com
+   CONTACT_FROM_EMAIL="D Web Créations <contact@dwebcreation.com>"
+   CONTACT_TO_EMAIL=quentindevaulx63@gmail.com
    GOOGLE_SITE_VERIFICATION=   # optionnel
    ```
 
