@@ -58,7 +58,7 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
         <div className="hidden items-center gap-6 lg:flex">
           <a
             href={siteConfig.phoneHref}
-            className="flex items-center gap-2 text-sm text-mist transition-colors hover:text-white"
+            className="hidden items-center gap-2 text-sm text-mist transition-colors hover:text-white xl:flex"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {siteConfig.phone}

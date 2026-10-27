@@ -205,3 +205,33 @@ export function Testimonials() {
     </section>
   )
 }
+
+export function SimulatorTeaser() {
+  return (
+    <section className="py-12 sm:py-16">
+      <div className="container">
+        <Reveal>
+          <Link
+            href="/simulateur"
+            className="group relative flex flex-col gap-8 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-8 transition-colors hover:border-white/25 sm:p-12 md:flex-row md:items-center md:justify-between"
+          >
+            <div className="pointer-events-none absolute -left-20 -top-24 h-64 w-64 rounded-full bg-flame/20 blur-[90px]" aria-hidden="true" />
+            <div className="relative">
+              <p className="chip">Simulateur · 1 minute</p>
+              <h2 className="mt-5 font-grotesk text-3xl font-semibold tracking-tight sm:text-5xl">
+                Quel site pour <span className="text-gradient">votre activité</span> ?
+              </h2>
+              <p className="mt-4 max-w-xl text-lg text-mist">
+                6 questions, et vous savez quelle formule vous correspond. Sans inscription.
+              </p>
+            </div>
+            <span className="relative inline-flex h-14 flex-none items-center gap-2 self-start rounded-full bg-white px-8 font-medium text-night transition-transform group-hover:scale-[1.04] md:self-auto">
+              Lancer le simulateur
+              <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+            </span>
+          </Link>
+        </Reveal>
+      </div>
+    </section>
+  )
+}

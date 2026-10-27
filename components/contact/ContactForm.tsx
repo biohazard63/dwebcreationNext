@@ -35,11 +35,20 @@ export function ContactForm() {
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [errorMessage, setErrorMessage] = useState('')
 
-  // Pré-sélectionne la formule quand on arrive depuis un lien « En parler »
+  // Pré-remplit le formulaire depuis un lien « En parler » ou le simulateur
   useEffect(() => {
-    const projet = new URLSearchParams(window.location.search).get('projet')
+    const params = new URLSearchParams(window.location.search)
+    const projet = params.get('projet')
     if (projet && projectTypes.some((p) => p.value === projet)) {
       setFormData((prev) => ({ ...prev, projectType: projet }))
+    }
+    // Réponses du simulateur ajoutées au message
+    const recap = params.get('recap')
+    if (recap) {
+      setFormData((prev) => ({
+        ...prev,
+        message: `Bonjour,\n\nVoici mon projet (réponses au simulateur) :\n${recap.slice(0, 1500)}\n\n`,
+      }))
     }
   }, [])
 
