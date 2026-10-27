@@ -41,6 +41,9 @@ for (const file of envFiles) {
   }
 }
 
+// Variables déjà définies dans Windows : Next.js ne les remplace pas par celles du fichier
+const preset = ['SMTP_USER', 'SMTP_PASS'].filter((k) => k in process.env)
+
 console.log('\n2. Variables lues (comme le fait Next.js en développement)')
 const { loadedEnvFiles } = nextEnv.loadEnvConfig(root, true, { info: () => {}, error: console.error })
 info(`Fichiers chargés : ${loadedEnvFiles.map((f) => f.path).join(', ') || 'aucun'}`)
@@ -52,6 +55,40 @@ if (pass) ok(`SMTP_PASS présent (${pass.length} caractères${pass.length === 16
 else ko('SMTP_PASS est vide ou absent')
 
 if (!user || !pass) {
+  console.log('\n   Analyse détaillée des lignes SMTP (valeurs masquées) :')
+  for (const p of preset) {
+    ko(`${p} est déjà défini dans les variables d’environnement de Windows / du terminal : il masque celui du fichier.`)
+    console.log(`      Supprimez-le (PowerShell : Remove-Item Env:${p}) puis rouvrez le terminal.`)
+  }
+  for (const file of envFiles.filter((f) => f !== '.env.example' && !f.toLowerCase().endsWith('.txt'))) {
+    const lines = fs.readFileSync(path.join(root, file), 'utf8').split(/\r?\n/)
+    const found = []
+    lines.forEach((line, i) => {
+      if (!/smtp_?pass/i.test(line)) return
+      const n = `${file}, ligne ${i + 1}`
+      found.push(n)
+      const trimmed = line.trim()
+      if (trimmed.startsWith('#')) return info(`${n} : en commentaire (# au début), ignorée`)
+      const eq = line.indexOf('=')
+      if (eq === -1) return ko(`${n} : pas de signe « = »`)
+      const key = line.slice(0, eq)
+      const value = line.slice(eq + 1)
+      if (key !== 'SMTP_PASS') {
+        const shown = JSON.stringify(key).replace(/[^\x20-\x7e]/g, (c) => `[U+${c.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')}]`)
+        ko(`${n} : nom de variable incorrect ${shown} — il faut exactement SMTP_PASS, sans espace ni caractère invisible`)
+      }
+      const v = value.trim()
+      if (!v) return ko(`${n} : aucune valeur après le « = »`)
+      if (/^[«“”‘’]/.test(v) || /[«»“”‘’]$/.test(v)) ko(`${n} : guillemets typographiques (« » “ ”) : utilisez des guillemets droits "..." ou aucun`)
+      if (value !== value.trimStart()) ko(`${n} : espace juste après le « = »`)
+      if (v.includes('$')) ko(`${n} : contient un « $ », interprété comme une variable par Next.js. Un mot de passe d’application Gmail ne contient que des lettres.`)
+      if (/[^\x20-\x7e]/.test(v)) ko(`${n} : contient des caractères invisibles ou accentués (souvent dus au copier-coller)`)
+      const letters = v.replace(/^["']|["']$/g, '').replace(/\s/g, '')
+      info(`${n} : valeur de ${letters.length} caractères${/^[a-z]{16}$/.test(letters) ? ' (format correct)' : ''}`)
+    })
+    if (found.length > 1) ko(`SMTP_PASS apparaît ${found.length} fois dans ${file} : c’est la dernière ligne qui compte. Gardez-en une seule.`)
+    if (found.length === 0) ko(`Aucune ligne SMTP_PASS dans ${file}`)
+  }
   console.log('\n➡️  Les variables ne sont pas lues.')
   if (encodingProblem) console.log('   Corrigez d’abord le problème de fichier signalé au point 1.')
   console.log('   Le fichier doit s’appeler exactement « .env » ou « .env.local », être dans ce dossier,')
