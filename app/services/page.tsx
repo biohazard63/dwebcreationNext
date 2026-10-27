@@ -1,66 +1,73 @@
-import { Metadata } from 'next'
-import { generateMetadata } from '@/lib/utils'
+import { Cta, Faq, Heading, JsonLd, Method, OffersDetailed, PageHeader } from '@/components/shared/blocks'
+import { Reveal } from '@/components/shared/Reveal'
+import { SpotlightCard } from '@/components/home/Spotlight'
+import { faqJsonLd, pageMetadata, serviceJsonLd } from '@/lib/seo'
+import { offers } from '@/lib/data/offers'
+import { siteConfig } from '@/lib/site'
 
-export const metadata: Metadata = generateMetadata({
-  title: "Services - DWebCreation",
-  description: "Découvrez nos services de développement web : sites vitrine, e-commerce, applications web, SEO et plus encore.",
-  url: "https://dwebcreation.com/services",
+export const metadata = pageMetadata({
+  title: `Création de site internet à ${siteConfig.city} — Formules`,
+  description: `Site vitrine, réservation, boutique en ligne ou refonte : des formules claires pour artisans et commerçants à ${siteConfig.city}. Devis gratuit.`,
+  path: '/services',
 })
+
+const extras = [
+  {
+    title: 'Référencement local',
+    text: 'Optimisation des pages pour votre ville et votre zone d’intervention, et aide à la configuration de votre fiche Google Business Profile.',
+  },
+  {
+    title: 'Maintenance & évolutions',
+    text: 'Mises à jour, nouvelles pages, modifications de contenu : votre site évolue avec votre activité.',
+  },
+  {
+    title: 'Applications sur mesure',
+    text: 'Besoin d’un outil spécifique (espace client, gestion interne, tableau de bord) ? Parlons-en.',
+  },
+]
 
 export default function ServicesPage() {
   return (
-    <div className="section-padding">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Nos Services
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Des solutions web complètes et sur mesure pour répondre à tous vos besoins
-          </p>
+    <div className="overflow-x-clip">
+      <JsonLd data={faqJsonLd()} />
+      {offers.map((offer) => (
+        <JsonLd
+          key={offer.id}
+          data={serviceJsonLd({ name: offer.name, description: offer.pitch, path: `/services#${offer.id}`, audience: offer.forWho })}
+        />
+      ))}
+      <PageHeader
+        breadcrumbs={[{ name: 'Services', href: '/services' }]}
+        chip="Services"
+        title={<>Des formules <span className="text-gradient">simples</span>, adaptées à votre métier.</>}
+        intro="Que vous partiez de zéro ou que votre site actuel ne vous apporte rien, il existe une formule pour vous. Chacune est chiffrée sur devis, gratuitement et sans engagement."
+      />
+
+      <section className="pb-24 sm:pb-32">
+        <div className="container">
+          <OffersDetailed />
         </div>
-        
-        <div className="prose prose-lg mx-auto max-w-4xl">
-          <p>
-            Chez DWebCreation, nous proposons une gamme complète de services de développement web 
-            pour vous accompagner dans tous vos projets digitaux. De la conception à la mise en ligne, 
-            en passant par la maintenance et l’optimisation, nous sommes là pour vous.
-          </p>
-          
-          <h2>Nos prestations principales</h2>
-          
-          <h3>Sites Web Vitrine</h3>
-          <p>
-            Création de sites web professionnels et modernes pour présenter votre activité, 
-            vos services et votre expertise. Design responsive, optimisation SEO et interface 
-            utilisateur intuitive.
-          </p>
-          
-          <h3>E-commerce</h3>
-          <p>
-            Développement de boutiques en ligne performantes avec gestion des produits, 
-            système de paiement sécurisé, gestion des stocks et analytics intégrés.
-          </p>
-          
-          <h3>Applications Web</h3>
-          <p>
-            Création d’applications web sur mesure pour automatiser vos processus, 
-            gérer vos données et améliorer votre productivité.
-          </p>
-          
-          <h3>SEO & Référencement</h3>
-          <p>
-            Optimisation de votre visibilité sur les moteurs de recherche avec des 
-            techniques modernes et durables.
-          </p>
-          
-          <h3>Maintenance & Support</h3>
-          <p>
-            Services de maintenance continue, mises à jour de sécurité et support 
-            technique pour garantir la performance de vos solutions web.
-          </p>
+      </section>
+
+      <section className="py-24 sm:py-32">
+        <div className="container">
+          <Heading chip="En complément" title={<>Ce que je peux faire <span className="text-gradient">en plus</span>.</>} />
+          <div className="mt-14 grid gap-4 md:grid-cols-3">
+            {extras.map((item, i) => (
+              <Reveal key={item.title} delay={i * 90} className="h-full">
+                <SpotlightCard className="h-full p-8">
+                  <h3 className="text-xl font-semibold">{item.title}</h3>
+                  <p className="mt-3 leading-relaxed text-mist">{item.text}</p>
+                </SpotlightCard>
+              </Reveal>
+            ))}
+          </div>
         </div>
-      </div>
+      </section>
+
+      <Method />
+      <Faq />
+      <Cta />
     </div>
   )
 }

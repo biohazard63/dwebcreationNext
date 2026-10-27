@@ -1,65 +1,73 @@
-import { Metadata } from 'next'
-import { generateMetadata } from '@/lib/utils'
+import Link from 'next/link'
+import { ArrowUpRight } from 'lucide-react'
+import { Cta, PageHeader } from '@/components/shared/blocks'
+import { SpotlightCard } from '@/components/home/Spotlight'
+import { Reveal } from '@/components/shared/Reveal'
+import { projects } from '@/lib/data/projects'
+import { pageMetadata } from '@/lib/seo'
+import { siteConfig } from '@/lib/site'
 
-export const metadata: Metadata = generateMetadata({
-  title: "Portfolio - DWebCreation",
-  description: "Découvrez nos réalisations : sites web, applications, e-commerce et projets sur mesure.",
-  url: "https://dwebcreation.com/portfolio",
-})
+export const metadata = {
+  ...pageMetadata({
+    title: 'Réalisations',
+    description: `Quelques sites internet réalisés par ${siteConfig.name} pour des professionnels de ${siteConfig.city} et du ${siteConfig.region}.`,
+    path: '/portfolio',
+  }),
+  // Page masquée des moteurs de recherche tant qu'aucun projet n'est publié
+  ...(projects.length === 0 && { robots: { index: false, follow: true } }),
+}
 
 export default function PortfolioPage() {
   return (
-    <div className="section-padding">
-      <div className="container">
-        <div className="mx-auto max-w-2xl text-center mb-16">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-            Notre Portfolio
-          </h1>
-          <p className="mt-4 text-lg text-muted-foreground">
-            Découvrez nos réalisations et laissez-vous inspirer par nos projets
-          </p>
+    <>
+      <PageHeader
+        breadcrumbs={[{ name: 'Réalisations', href: '/portfolio' }]}
+        chip="Réalisations"
+        title={<>Des sites qui <span className="text-gradient">travaillent</span> pour leurs propriétaires.</>}
+        intro="Chaque projet part d’un métier, d’une clientèle et d’un objectif précis."
+      />
+
+      <section className="pb-24 sm:pb-32">
+        <div className="container">
+          {projects.length === 0 ? (
+            <Reveal className="mx-auto max-w-xl text-center">
+              <p className="text-lg leading-relaxed text-mist">
+                Les réalisations seront bientôt présentées ici. En attendant, je vous montre volontiers des
+                exemples de projets lors de notre premier échange.
+              </p>
+              <Link href="/contact" className="mt-8 inline-flex font-medium text-flame hover:underline">
+                Prendre contact
+              </Link>
+            </Reveal>
+          ) : (
+            <div className="grid gap-8 md:grid-cols-2">
+              {projects.map((project) => (
+                <Reveal key={project.title} as="article" className="h-full">
+                  <SpotlightCard className="flex h-full flex-col p-8">
+                  <p className="text-sm text-mist">{project.sector}</p>
+                  <h2 className="mt-2 font-grotesk text-3xl font-semibold tracking-tight">{project.title}</h2>
+                  <p className="mt-4 text-mist">{project.description}</p>
+                  {project.results && <p className="mt-4 font-medium text-flame">{project.results}</p>}
+                  {project.url && (
+                    <a
+                      href={project.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-auto inline-flex items-center gap-1 pt-6 text-sm font-medium text-flame hover:underline"
+                    >
+                      Voir le site
+                      <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
+                    </a>
+                  )}
+                  </SpotlightCard>
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
-        
-        <div className="prose prose-lg mx-auto max-w-4xl">
-          <p>
-            Notre portfolio présente une sélection de nos meilleurs projets, 
-            réalisés pour des clients de différents secteurs. Chaque projet 
-            illustre notre expertise technique et notre capacité à créer des 
-            solutions web innovantes et performantes.
-          </p>
-          
-          <h2>Nos domaines d’expertise</h2>
-          
-          <h3>E-commerce</h3>
-          <p>
-            Boutiques en ligne modernes avec gestion complète des produits, 
-            paiements sécurisés et expérience utilisateur optimisée.
-          </p>
-          
-          <h3>Applications Web</h3>
-          <p>
-            Applications sur mesure pour automatiser les processus métier 
-            et améliorer la productivité des équipes.
-          </p>
-          
-          <h3>Sites Vitrine</h3>
-          <p>
-            Sites web professionnels avec design moderne, responsive et 
-            optimisation SEO pour maximiser la visibilité.
-          </p>
-          
-          <h3>Applications Mobile</h3>
-          <p>
-            Applications mobiles natives et hybrides pour iOS et Android, 
-            développées avec les technologies les plus récentes.
-          </p>
-          
-          <p>
-            <strong>En cours de développement...</strong> Cette page sera bientôt 
-            enrichie avec tous nos projets et études de cas détaillées.
-          </p>
-        </div>
-      </div>
-    </div>
+      </section>
+
+      <Cta />
+    </>
   )
 }

@@ -3,103 +3,190 @@
 @tailwind utilities;
 
 @layer base {
+  /* Thème clair */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 25 95% 53%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222.2 84% 4.9%;
-    --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96%;
-    --accent-foreground: 222.2 84% 4.9%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 25 95% 53%;
-    --radius: 0.5rem;
+    --bg: 246 246 249;
+    --fg: 12 12 20;
+    --mist: 86 86 104;
+    --mist-dark: 128 128 146;
+    color-scheme: light;
   }
 
+  /* Thème sombre */
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 25 95% 53%;
-    --primary-foreground: 222.2 84% 4.9%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 25 95% 53%;
+    --bg: 7 7 10;
+    --fg: 255 255 255;
+    --mist: 161 161 181;
+    --mist-dark: 110 110 130;
+    color-scheme: dark;
   }
-}
 
-@layer base {
-  * {
-    border-color: hsl(var(--border));
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
   body {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
+    @apply bg-night text-white;
+  }
+
+  ::selection {
+    @apply bg-blush text-white;
+  }
+
+  :focus-visible {
+    @apply outline-none ring-2 ring-flame ring-offset-2 ring-offset-night;
   }
 }
 
+/* Apparition douce au défilement : uniquement si JavaScript est actif */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+
+  .js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Nouveau style (accueil) ---------- */
 @layer components {
-  .container {
-    @apply mx-auto px-4 sm:px-6 lg:px-8;
+  .text-gradient {
+    @apply bg-gradient-to-r from-flame via-blush to-violet bg-clip-text text-transparent;
   }
-  
-  .section-padding {
-    @apply py-16 sm:py-24;
+
+  .glass {
+    @apply border border-white/10 bg-snow/70 backdrop-blur-xl dark:bg-white/[0.04];
   }
-  
-  .gradient-text {
-    @apply bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent;
+
+  .chip {
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-snow/60 dark:bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-mist;
   }
-  
-  .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+
+  .heading-hero {
+    @apply font-grotesk text-[2.9rem] font-semibold leading-[0.98] tracking-[-0.035em] sm:text-7xl lg:text-[5.6rem];
+  }
+
+  .heading-2 {
+    @apply font-grotesk text-4xl font-semibold leading-[1.02] tracking-[-0.03em] sm:text-6xl;
   }
 }
 
-@layer utilities {
-  .animate-fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
+/* Carte « projecteur » : halo qui suit la souris */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 122, 48, 0.14), transparent 60%);
+}
+
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* Maquette qui se construit */
+@keyframes build-in {
+  from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(14px) scale(0.96);
   }
-  
-  .animation-delay-200 {
-    animation-delay: 0.2s;
-  }
-  
-  .animation-delay-400 {
-    animation-delay: 0.4s;
-  }
-  
-  .animation-delay-600 {
-    animation-delay: 0.6s;
-  }
-}
-
-@keyframes fadeInUp {
   to {
     opacity: 1;
+    transform: none;
+  }
+}
+
+.build {
+  opacity: 0;
+  animation: build-in 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+@keyframes float-y {
+  0%,
+  100% {
     transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float-y 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  animation: marquee 40s linear infinite;
+}
+
+@keyframes grad-shift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.grad-animate {
+  background-size: 200% 200%;
+  animation: grad-shift 8s ease infinite;
+}
+
+.step-line {
+  transform-origin: left;
+  transform: scaleX(0);
+  transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+}
+
+.is-visible .step-line,
+html:not(.js) .step-line {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .build,
+  .float,
+  .marquee,
+  .grad-animate {
+    animation: none !important;
+    opacity: 1;
+  }
+
+  .step-line {
+    transform: none;
+    transition: none;
   }
 }

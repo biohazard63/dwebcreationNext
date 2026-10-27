@@ -1,35 +1,62 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { Bricolage_Grotesque, Inter, Instrument_Serif } from 'next/font/google'
 import './globals.css'
-import { defaultMetadata } from '@/lib/seo'
-import { Header } from '@/components/sections/Header'
-import { Footer } from '@/components/sections/Footer'
+import { defaultMetadata, localBusinessJsonLd } from '@/lib/seo'
+import { navigation } from '@/lib/site'
+import { projects } from '@/lib/data/projects'
+import { Header } from '@/components/layout/Header'
+import { Footer } from '@/components/layout/Footer'
+import { MobileContactBar } from '@/components/layout/MobileContactBar'
+import { JsonLd } from '@/components/shared/blocks'
 
-const inter = Inter({ subsets: ['latin'], display: 'swap' })
+const sans = Inter({ subsets: ['latin'], display: 'swap', variable: '--font-sans' })
+const display = Instrument_Serif({
+  subsets: ['latin'],
+  weight: '400',
+  display: 'swap',
+  variable: '--font-display',
+})
 
-// Applique le thème avant le premier rendu pour éviter le flash clair/sombre
-const themeScript = `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark')}}catch(e){}})()`
+const grotesk = Bricolage_Grotesque({ subsets: ['latin'], display: 'swap', variable: '--font-grotesk' })
 
 export const metadata: Metadata = defaultMetadata
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F6F6F9' },
+    { media: '(prefers-color-scheme: dark)', color: '#07070A' },
+  ],
+}
+
+// Avant le premier affichage : active les animations (JS disponible) et applique le thème
+// choisi, ou à défaut celui de l'appareil, pour éviter tout flash clair / sombre
+const initScript = `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){d.classList.add('dark')}}catch(e){d.classList.add('dark')}})()`
+
+// La page Réalisations n'apparaît dans le menu que lorsqu'il y a des projets à montrer
+const links = navigation.filter((item) => item.href !== '/portfolio' || projects.length > 0)
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="fr" className={`${sans.variable} ${display.variable} ${grotesk.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: initScript }} />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className="font-sans">
+        <a
+          href="#contenu"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-night"
+        >
+          Aller au contenu
+        </a>
+        <JsonLd data={localBusinessJsonLd()} />
         <div className="flex min-h-screen flex-col">
-          <Header />
-          <main className="flex-1">
+          <Header links={links} />
+          <main id="contenu" className="flex-1">
             {children}
           </main>
-          <Footer />
+          <Footer links={links} />
         </div>
+        <MobileContactBar />
       </body>
     </html>
   )

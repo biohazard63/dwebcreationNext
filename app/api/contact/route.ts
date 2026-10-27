@@ -1,22 +1,58 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
+import { siteConfig } from '@/lib/site'
+import { projectTypes } from '@/lib/data/contact'
+import { canSendToVisitors, mailProvider, sendMail } from '@/lib/mail'
 
-const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || 'DWebCreation <contact@dwebcreation.com>'
-const TO_EMAIL = process.env.CONTACT_TO_EMAIL || 'contact@dwebcreation.com'
+const TO_EMAIL = process.env.CONTACT_TO_EMAIL || siteConfig.email
 
-const MAX_LENGTHS = { name: 100, email: 254, company: 100, message: 5000 }
+const MAX_LENGTHS = { name: 100, email: 254, phone: 30, company: 100, message: 5000 }
+
+// Taille maximale acceptée pour une demande (les champs font au plus ~5,5 Ko)
+const MAX_BODY_BYTES = 16 * 1024
 
 // Limitation simple du nombre d'envois par IP (mémoire de l'instance)
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000
 const RATE_LIMIT_MAX = 5
 const submissions = new Map<string, number[]>()
 
+// Plafond global d'emails de confirmation par heure : évite qu'un robot utilise
+// le formulaire pour faire envoyer des emails à des inconnus depuis votre adresse
+const CONFIRMATION_WINDOW_MS = 60 * 60 * 1000
+const CONFIRMATION_MAX = 30
+let confirmations: number[] = []
+
 function isRateLimited(ip: string) {
   const now = Date.now()
   const recent = (submissions.get(ip) || []).filter((t) => now - t < RATE_LIMIT_WINDOW_MS)
   recent.push(now)
   submissions.set(ip, recent)
+  // Nettoyage pour que la mémoire ne grossisse pas indéfiniment
+  if (submissions.size > 5000) {
+    for (const [key, times] of submissions) {
+      if (times.every((t) => now - t >= RATE_LIMIT_WINDOW_MS)) submissions.delete(key)
+    }
+  }
   return recent.length > RATE_LIMIT_MAX
+}
+
+function canSendConfirmation() {
+  const now = Date.now()
+  confirmations = confirmations.filter((t) => now - t < CONFIRMATION_WINDOW_MS)
+  if (confirmations.length >= CONFIRMATION_MAX) return false
+  confirmations.push(now)
+  return true
+}
+
+// La demande doit venir du site lui-même (et pas d'un formulaire caché sur un autre site)
+function isSameOrigin(request: NextRequest) {
+  const origin = request.headers.get('origin')
+  if (!origin) return false
+  try {
+    const host = request.headers.get('x-forwarded-host') || request.headers.get('host')
+    return new URL(origin).host === host
+  } catch {
+    return false
+  }
 }
 
 function escapeHtml(value: string) {
@@ -34,12 +70,17 @@ function asTrimmedString(value: unknown) {
 
 export async function POST(request: NextRequest) {
   try {
-    if (!process.env.RESEND_API_KEY) {
-      console.error('RESEND_API_KEY manquante')
-      return NextResponse.json(
-        { error: 'Le service d\'envoi est temporairement indisponible' },
-        { status: 503 }
-      )
+    if (!isSameOrigin(request)) {
+      return NextResponse.json({ error: 'Requête non autorisée' }, { status: 403 })
+    }
+
+    // Seul le format JSON envoyé par le formulaire est accepté
+    if (!request.headers.get('content-type')?.toLowerCase().startsWith('application/json')) {
+      return NextResponse.json({ error: 'Format non pris en charge' }, { status: 415 })
+    }
+
+    if (Number(request.headers.get('content-length') || 0) > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: 'Requête trop volumineuse' }, { status: 413 })
     }
 
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown'
@@ -50,8 +91,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const body = await request.json().catch(() => null)
-    if (!body || typeof body !== 'object') {
+    // Lecture du corps avec une limite de taille (au cas où Content-Length serait absent ou faux)
+    const raw = await request.text()
+    if (Buffer.byteLength(raw) > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: 'Requête trop volumineuse' }, { status: 413 })
+    }
+    let body: Record<string, unknown> | null = null
+    try {
+      body = JSON.parse(raw)
+    } catch {
+      body = null
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
       return NextResponse.json({ error: 'Requête invalide' }, { status: 400 })
     }
 
@@ -62,8 +113,10 @@ export async function POST(request: NextRequest) {
 
     const name = asTrimmedString(body.name)
     const email = asTrimmedString(body.email)
+    const phone = asTrimmedString(body.phone)
     const company = asTrimmedString(body.company)
     const message = asTrimmedString(body.message)
+    const projectType = projectTypes.find((p) => p.value === asTrimmedString(body.projectType))
 
     // Validation basique
     if (!name || !email || !message) {
@@ -76,6 +129,7 @@ export async function POST(request: NextRequest) {
     if (
       name.length > MAX_LENGTHS.name ||
       email.length > MAX_LENGTHS.email ||
+      phone.length > MAX_LENGTHS.phone ||
       company.length > MAX_LENGTHS.company ||
       message.length > MAX_LENGTHS.message
     ) {
@@ -94,86 +148,94 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const resend = new Resend(process.env.RESEND_API_KEY)
+    // Vérifié après la validation : une demande invalide est toujours refusée, même sans configuration email
+    if (!mailProvider()) {
+      console.error('Envoi d’emails non configuré : renseigner SMTP_USER / SMTP_PASS ou RESEND_API_KEY')
+      return NextResponse.json(
+        { error: 'Le service d\'envoi est temporairement indisponible' },
+        { status: 503 }
+      )
+    }
+
     const safeName = escapeHtml(name)
     const safeEmail = escapeHtml(email)
+    const safePhone = escapeHtml(phone)
     const safeCompany = escapeHtml(company)
     const safeMessage = escapeHtml(message)
     const subjectName = name.replace(/[\r\n]+/g, ' ')
 
     // Envoi de l'email de notification
-    const { error } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [TO_EMAIL],
-      replyTo: email,
-      subject: `Nouveau message de contact - ${subjectName}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Nouveau message de contact</h2>
-          
-          <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <h3 style="margin-top: 0;">Informations du contact :</h3>
-            <p><strong>Nom :</strong> ${safeName}</p>
-            <p><strong>Email :</strong> ${safeEmail}</p>
-            ${safeCompany ? `<p><strong>Entreprise :</strong> ${safeCompany}</p>` : ''}
-          </div>
-          
-          <div style="background-color: #f1f5f9; padding: 20px; border-radius: 8px;">
-            <h3 style="margin-top: 0;">Message :</h3>
-            <p style="white-space: pre-wrap;">${safeMessage}</p>
-          </div>
-          
-          <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-            <p style="color: #64748b; font-size: 14px;">
-              Ce message a été envoyé depuis le formulaire de contact du site DWebCreation.
-            </p>
-          </div>
-        </div>
-      `,
-    })
+    try {
+      await sendMail({
+        to: TO_EMAIL,
+        replyTo: email,
+        subject: `Nouvelle demande de contact - ${subjectName}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #FF3D7F;">Nouvelle demande de contact</h2>
 
-    if (error) {
-      console.error('Erreur Resend:', error)
+            <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+              <h3 style="margin-top: 0;">Informations du contact :</h3>
+              <p><strong>Nom :</strong> ${safeName}</p>
+              <p><strong>Email :</strong> ${safeEmail}</p>
+              ${safePhone ? `<p><strong>Téléphone :</strong> ${safePhone}</p>` : ''}
+              ${safeCompany ? `<p><strong>Entreprise :</strong> ${safeCompany}</p>` : ''}
+              ${projectType ? `<p><strong>Projet :</strong> ${escapeHtml(projectType.label)}</p>` : ''}
+            </div>
+
+            <div style="background-color: #f1f5f9; padding: 20px; border-radius: 8px;">
+              <h3 style="margin-top: 0;">Message :</h3>
+              <p style="white-space: pre-wrap;">${safeMessage}</p>
+            </div>
+
+            <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+              <p style="color: #64748b; font-size: 14px;">
+                Envoyé depuis le formulaire du site ${siteConfig.name}. Répondez directement à cet email pour écrire au client.
+              </p>
+            </div>
+          </div>
+        `,
+      })
+    } catch (error) {
+      console.error('Erreur d’envoi (notification) :', error)
       return NextResponse.json(
-        { error: 'Erreur lors de l\'envoi de l\'email' },
+        { error: 'Erreur lors de l\'envoi du message. Vous pouvez aussi m\'appeler directement.' },
         { status: 500 }
       )
     }
 
     // Email de confirmation automatique (un échec n'invalide pas l'envoi principal)
-    const { error: confirmationError } = await resend.emails.send({
-      from: FROM_EMAIL,
-      to: [email],
-      subject: 'Confirmation de votre message - DWebCreation',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #2563eb;">Merci pour votre message !</h2>
-          
-          <p>Bonjour ${safeName},</p>
-          
-          <p>Nous avons bien reçu votre message et nous vous remercions de nous avoir contactés.</p>
-          
-          <p>Notre équipe va étudier votre demande et vous répondra dans les plus brefs délais (généralement sous 24h).</p>
-          
-          <p>En attendant, n'hésitez pas à consulter notre <a href="https://dwebcreation.com/portfolio" style="color: #2563eb;">portfolio</a> pour découvrir nos réalisations.</p>
-          
-          <p>Cordialement,<br>L'équipe DWebCreation</p>
-          
-          <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
-            <p style="color: #64748b; font-size: 12px;">
-              Cet email est envoyé automatiquement. Merci de ne pas y répondre directement.
-            </p>
-          </div>
-        </div>
-      `,
-    })
+    if (canSendToVisitors() && canSendConfirmation()) {
+      try {
+        await sendMail({
+          to: email,
+          subject: `Votre message a bien été reçu - ${siteConfig.name}`,
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h2 style="color: #FF3D7F;">Merci pour votre message !</h2>
 
-    if (confirmationError) {
-      console.error('Erreur Resend (confirmation):', confirmationError)
+              <p>Bonjour,</p>
+
+              <p>J'ai bien reçu votre demande et je vous en remercie.</p>
+
+              <p>Je l'étudie et je reviens vers vous très vite (${siteConfig.responseTime.toLowerCase()}). Si c'est urgent, vous pouvez aussi m'appeler au ${siteConfig.phone}.</p>
+
+              <p>À très bientôt,<br>${siteConfig.owner} — ${siteConfig.name}</p>
+
+              <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+                <p style="color: #64748b; font-size: 12px;">
+                  Cet email est envoyé automatiquement suite à votre demande sur le site ${siteConfig.name}.
+                </p>
+              </div>
+            </div>
+          `,
+        })
+      } catch (error) {
+        console.error('Erreur d’envoi (confirmation) :', error)
+      }
     }
 
     return NextResponse.json({ success: true })
-
   } catch (error) {
     console.error('Erreur API contact:', error)
     return NextResponse.json(

@@ -2,54 +2,42 @@ const typography = require('@tailwindcss/typography')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: ["class"],
+  darkMode: 'class',
   content: [
-    './pages/**/*.{ts,tsx}',
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: { DEFAULT: '1.25rem', sm: '1.5rem', lg: '2rem' },
+      screens: { '2xl': '1240px' },
+    },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+        // Couleurs qui suivent le thème (clair / sombre), définies dans app/globals.css :
+        // « night » = fond, « white » = texte principal
+        night: {
+          DEFAULT: 'rgb(var(--bg) / <alpha-value>)',
+          // Teintes fixes pour les cadres ordinateur / téléphone
+          700: '#16161F',
+          600: '#22222E',
         },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+        white: 'rgb(var(--fg) / <alpha-value>)',
+        mist: {
+          DEFAULT: 'rgb(var(--mist) / <alpha-value>)',
+          dark: 'rgb(var(--mist-dark) / <alpha-value>)',
         },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
+        // Blanc fixe (texte sur dégradé, mini-sites des démos)
+        snow: '#FFFFFF',
+        flame: '#FF7A30',
+        blush: '#FF3D7F',
+        violet: '#8B5CF6',
       },
-      borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+      fontFamily: {
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'Georgia', 'serif'],
+        grotesk: ['var(--font-grotesk)', 'system-ui', 'sans-serif'],
       },
     },
   },
