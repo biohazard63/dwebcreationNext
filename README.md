@@ -115,6 +115,12 @@ Sans domaine vérifié, Resend n'envoie qu'à l'adresse de votre compte Resend :
 
 Si SMTP et Resend sont configurés tous les deux, SMTP est utilisé.
 
+### Tester la configuration
+```bash
+npm run test:email
+```
+Cette commande vérifie les fichiers `.env` (nom, encodage — un fichier enregistré en UTF-16 par PowerShell est corrigé automatiquement), les variables lues (sans afficher le mot de passe), la connexion à Gmail, puis envoie un email de test.
+
 ## 🚀 Déploiement
 
 ### Vercel (Recommandé)

@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "type-check": "tsc --noEmit",
-    "postbuild": "next-sitemap"
+    "postbuild": "next-sitemap",
+    "test:email": "node scripts/test-email.mjs"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.5.0",

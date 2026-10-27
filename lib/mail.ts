@@ -43,7 +43,8 @@ function smtpTransporter() {
       host: process.env.SMTP_HOST || 'smtp.gmail.com',
       port,
       secure: process.env.SMTP_SECURE ? process.env.SMTP_SECURE === 'true' : port === 465,
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      // Les espaces affichés par Google dans le mot de passe d'application sont ignorés
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS?.replace(/\s/g, '') },
     })
   }
   return transporter
