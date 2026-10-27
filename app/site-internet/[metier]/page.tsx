@@ -55,7 +55,7 @@ export default async function MetierPage({ params }: Props) {
         <div className="container flex flex-col gap-3 sm:flex-row">
           <Link
             href={`/contact?projet=${metier.offerId}`}
-            className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-8 font-medium text-white"
+            className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-8 font-medium text-snow"
           >
             Demander un devis gratuit
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />

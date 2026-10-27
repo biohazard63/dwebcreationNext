@@ -32,9 +32,9 @@ function ScaledScreen({ width, height, children }: { width: number; height: numb
 export function Laptop({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full">
-      <div className="rounded-t-2xl border border-white/15 bg-night-700 p-2 pb-3 shadow-2xl shadow-black/60 sm:p-3">
-        <div className="mx-auto mb-2 h-1.5 w-1.5 rounded-full bg-white/20" />
-        <div className="overflow-hidden rounded-md bg-white">
+      <div className="rounded-t-2xl border border-snow/15 bg-night-700 p-2 pb-3 shadow-2xl shadow-black/60 sm:p-3">
+        <div className="mx-auto mb-2 h-1.5 w-1.5 rounded-full bg-snow/20" />
+        <div className="overflow-hidden rounded-md bg-snow">
           <ScaledScreen width={1100} height={690}>
             {children}
           </ScaledScreen>
@@ -49,8 +49,8 @@ export function Laptop({ children }: { children: React.ReactNode }) {
 
 export function Phone({ children }: { children: React.ReactNode }) {
   return (
-    <div className="w-full rounded-[2.4rem] border border-white/15 bg-night-700 p-2 shadow-2xl shadow-black/70">
-      <div className="relative overflow-hidden rounded-[1.9rem] bg-white">
+    <div className="w-full rounded-[2.4rem] border border-snow/15 bg-night-700 p-2 shadow-2xl shadow-black/70">
+      <div className="relative overflow-hidden rounded-[1.9rem] bg-snow">
         <div className="absolute left-1/2 top-2 z-10 h-5 w-20 -translate-x-1/2 rounded-full bg-black" />
         <ScaledScreen width={390} height={800}>
           {children}

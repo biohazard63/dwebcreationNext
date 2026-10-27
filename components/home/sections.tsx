@@ -14,7 +14,7 @@ export function Marquee() {
     <div className="flex shrink-0 items-center gap-10 pr-10" aria-hidden={hidden || undefined}>
       {items.map((item, i) => (
         <span key={item} className="flex items-center gap-10 whitespace-nowrap font-grotesk text-3xl font-semibold tracking-tight sm:text-5xl">
-          <span className={i % 2 ? 'text-transparent [-webkit-text-stroke:1px_rgba(255,255,255,0.35)]' : 'text-white/90'}>{item}</span>
+          <span className={i % 2 ? 'text-transparent [-webkit-text-stroke:1px_rgb(var(--fg)/0.35)]' : 'text-white/90'}>{item}</span>
           <span className="text-gradient text-2xl">✦</span>
         </span>
       ))}
@@ -53,7 +53,7 @@ export function Bento() {
                         <span className="block font-grotesk text-2xl font-semibold tracking-tight sm:text-3xl">{offer.name}</span>
                         <span className="mt-1 block text-mist">{offer.pitch}</span>
                       </span>
-                      <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full border border-white/15 transition-all group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-flame group-hover:to-blush">
+                      <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full border border-white/15 transition-all group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-flame group-hover:to-blush group-hover:text-snow">
                         <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
                       </span>
                     </Link>
@@ -106,7 +106,7 @@ export function Bento() {
           <Reveal className="md:col-span-2">
             <SpotlightCard className="h-full p-7">
               <div className="flex -space-x-2" aria-hidden="true">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-flame to-blush font-grotesk text-lg font-semibold ring-4 ring-night">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-flame to-blush font-grotesk text-lg font-semibold text-snow ring-4 ring-night">
                   {siteConfig.owner.charAt(0)}
                 </span>
                 <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 ring-4 ring-night">
@@ -122,7 +122,7 @@ export function Bento() {
           <Reveal className="md:col-span-2" delay={80}>
             <SpotlightCard className="relative h-full overflow-hidden p-7">
               <div
-                className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgba(255,255,255,0.18)_1px,transparent_1px)] bg-[size:14px_14px] [mask-image:radial-gradient(circle_at_75%_40%,black,transparent_65%)]"
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(rgb(var(--fg)/0.18)_1px,transparent_1px)] bg-[size:14px_14px] [mask-image:radial-gradient(circle_at_75%_40%,black,transparent_65%)]"
                 aria-hidden="true"
               />
               <span className="absolute right-10 top-8 flex h-4 w-4" aria-hidden="true">
@@ -139,8 +139,8 @@ export function Bento() {
           {/* Devis */}
           <Reveal className="md:col-span-2" delay={160}>
             <Link href="/contact" className="group block h-full">
-              <div className="flex h-full flex-col justify-between rounded-3xl bg-gradient-to-br from-flame via-blush to-violet p-7 transition-transform duration-300 group-hover:scale-[1.02]">
-                <p className="text-sm text-white/80">{siteConfig.responseTime}</p>
+              <div className="flex h-full flex-col justify-between rounded-3xl bg-gradient-to-br from-flame via-blush to-violet p-7 text-snow transition-transform duration-300 group-hover:scale-[1.02]">
+                <p className="text-sm text-snow/80">{siteConfig.responseTime}</p>
                 <div className="mt-8 flex items-end justify-between">
                   <h3 className="font-grotesk text-3xl font-semibold leading-none tracking-tight">
                     Devis

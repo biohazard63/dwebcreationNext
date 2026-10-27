@@ -18,7 +18,7 @@ export default function PrivacyPage() {
       />
       <section className="pb-24 sm:pb-32">
         <div className="container">
-          <div className="prose prose-lg prose-invert max-w-3xl prose-headings:font-grotesk prose-headings:font-semibold prose-a:text-flame">
+          <div className="prose prose-lg max-w-3xl dark:prose-invert prose-headings:font-grotesk prose-headings:font-semibold prose-a:text-flame">
             <h2>Données collectées</h2>
             <p>
               Lorsque vous utilisez le formulaire de contact, les informations que vous saisissez sont collectées :

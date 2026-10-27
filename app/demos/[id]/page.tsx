@@ -80,7 +80,7 @@ export default async function DemoPage({ params }: Props) {
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href={`/contact?${new URLSearchParams({ projet: demo.offerId, recap })}`}
-                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-7 font-medium text-white"
+                className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-7 font-medium text-snow"
               >
                 Je veux le même
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />

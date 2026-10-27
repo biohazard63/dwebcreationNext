@@ -29,7 +29,7 @@ export default function DemosPage() {
                 <SpotlightCard className="flex h-full flex-col p-8">
                   <div className="flex items-center justify-between">
                     <span className="chip">Concept · {demo.label}</span>
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-all group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-flame group-hover:to-blush">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 transition-all group-hover:border-transparent group-hover:bg-gradient-to-br group-hover:from-flame group-hover:to-blush group-hover:text-snow">
                       <ArrowUpRight className="h-5 w-5" aria-hidden="true" />
                     </span>
                   </div>

@@ -3,6 +3,24 @@
 @tailwind utilities;
 
 @layer base {
+  /* Thème clair */
+  :root {
+    --bg: 246 246 249;
+    --fg: 12 12 20;
+    --mist: 86 86 104;
+    --mist-dark: 128 128 146;
+    color-scheme: light;
+  }
+
+  /* Thème sombre */
+  .dark {
+    --bg: 7 7 10;
+    --fg: 255 255 255;
+    --mist: 161 161 181;
+    --mist-dark: 110 110 130;
+    color-scheme: dark;
+  }
+
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -54,11 +72,11 @@
   }
 
   .glass {
-    @apply border border-white/10 bg-white/[0.04] backdrop-blur-xl;
+    @apply border border-white/10 bg-snow/70 backdrop-blur-xl dark:bg-white/[0.04];
   }
 
   .chip {
-    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-mist;
+    @apply inline-flex items-center gap-2 rounded-full border border-white/10 bg-snow/60 dark:bg-white/[0.04] px-3.5 py-1.5 text-xs font-medium text-mist;
   }
 
   .heading-hero {

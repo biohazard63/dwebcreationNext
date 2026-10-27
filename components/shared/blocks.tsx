@@ -22,7 +22,7 @@ export function PageHeader({ chip, title, intro }: { chip: string; title: React.
       <div className="pointer-events-none absolute inset-0" aria-hidden="true">
         <div className="absolute -left-40 -top-48 h-[32rem] w-[32rem] rounded-full bg-violet/20 blur-[140px]" />
         <div className="absolute -right-40 -top-20 h-[26rem] w-[26rem] rounded-full bg-flame/15 blur-[140px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--fg)/0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--fg)/0.05)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_70%)]" />
       </div>
       <div className="container relative pb-16 pt-16 sm:pb-20 sm:pt-24">
         <div className="max-w-4xl">
@@ -114,7 +114,7 @@ export function Faq() {
               <summary className="flex cursor-pointer list-none items-center justify-between gap-6 text-lg font-medium">
                 {item.question}
                 <span
-                  className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-white/15 text-lg transition-all group-open:rotate-45 group-open:border-transparent group-open:bg-gradient-to-br group-open:from-flame group-open:to-blush"
+                  className="flex h-8 w-8 flex-none items-center justify-center rounded-full border border-white/15 text-lg transition-all group-open:rotate-45 group-open:border-transparent group-open:bg-gradient-to-br group-open:from-flame group-open:to-blush group-open:text-snow"
                   aria-hidden="true"
                 >
                   +

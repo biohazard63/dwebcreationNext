@@ -16,7 +16,7 @@ export function MobileContactBar() {
         </a>
         <Link
           href="/contact"
-          className="flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-flame via-blush to-violet text-sm font-medium text-white"
+          className="flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-flame via-blush to-violet text-sm font-medium text-snow"
         >
           Devis gratuit
         </Link>

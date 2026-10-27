@@ -2,6 +2,7 @@ const typography = require('@tailwindcss/typography')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
@@ -14,16 +15,21 @@ module.exports = {
     },
     extend: {
       colors: {
+        // Couleurs qui suivent le thème (clair / sombre), définies dans app/globals.css :
+        // « night » = fond, « white » = texte principal
         night: {
-          DEFAULT: '#07070A',
-          800: '#0E0E14',
+          DEFAULT: 'rgb(var(--bg) / <alpha-value>)',
+          // Teintes fixes pour les cadres ordinateur / téléphone
           700: '#16161F',
           600: '#22222E',
         },
+        white: 'rgb(var(--fg) / <alpha-value>)',
         mist: {
-          DEFAULT: '#A1A1B5',
-          dark: '#6E6E82',
+          DEFAULT: 'rgb(var(--mist) / <alpha-value>)',
+          dark: 'rgb(var(--mist-dark) / <alpha-value>)',
         },
+        // Blanc fixe (texte sur dégradé, mini-sites des démos)
+        snow: '#FFFFFF',
         flame: '#FF7A30',
         blush: '#FF3D7F',
         violet: '#8B5CF6',

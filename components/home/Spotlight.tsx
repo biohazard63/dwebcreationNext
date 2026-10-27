@@ -14,7 +14,7 @@ export function SpotlightCard({ children, className }: { children: React.ReactNo
     <div
       onPointerMove={onMove}
       className={cn(
-        'spotlight rounded-3xl border border-white/10 bg-white/[0.03] transition-colors duration-300 hover:border-white/20',
+        'spotlight rounded-3xl border border-white/10 bg-snow/60 transition-colors duration-300 dark:bg-white/[0.03] hover:border-white/20',
         className
       )}
     >

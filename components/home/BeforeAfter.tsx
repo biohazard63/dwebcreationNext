@@ -21,7 +21,7 @@ export function BeforeAfter() {
         </Reveal>
 
         <Reveal className="mt-14">
-          <div className="relative mx-auto aspect-[4/5] max-w-5xl select-none overflow-hidden rounded-3xl border border-white/10 shadow-2xl shadow-black/60 sm:aspect-[16/9]">
+          <div className="relative mx-auto aspect-[4/5] max-w-5xl select-none overflow-hidden rounded-3xl border border-snow/10 shadow-2xl shadow-black/60 sm:aspect-[16/9]">
             <OldSite />
             <div className="absolute inset-0" style={{ clipPath: `inset(0 0 0 ${pos}%)` }}>
               <NewSite />
@@ -29,13 +29,13 @@ export function BeforeAfter() {
 
             {/* Poignée */}
             <div className="pointer-events-none absolute inset-y-0" style={{ left: `${pos}%` }} aria-hidden="true">
-              <div className="absolute inset-y-0 -left-px w-0.5 bg-white shadow-[0_0_20px_rgba(255,255,255,0.6)]" />
-              <div className="absolute left-0 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-night shadow-xl">
+              <div className="absolute inset-y-0 -left-px w-0.5 bg-snow shadow-[0_0_20px_rgba(255,255,255,0.6)]" />
+              <div className="absolute left-0 top-1/2 flex h-12 w-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-snow text-night shadow-xl">
                 <ChevronsLeftRight className="h-5 w-5" />
               </div>
             </div>
-            <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">Avant</span>
-            <span className="pointer-events-none absolute right-4 top-4 rounded-full bg-white px-3 py-1 text-xs font-medium text-night">Après</span>
+            <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-snow">Avant</span>
+            <span className="pointer-events-none absolute right-4 top-4 rounded-full bg-snow px-3 py-1 text-xs font-medium text-night">Après</span>
 
             <input
               type="range"
@@ -57,7 +57,7 @@ export function BeforeAfter() {
 function OldSite() {
   return (
     <div className="absolute inset-0 overflow-hidden bg-[#D4D0C8] p-3 text-black sm:p-6" style={{ fontFamily: '"Times New Roman", Times, serif' }}>
-      <div className="border-4 border-double border-[#000080] bg-white p-3 sm:p-5">
+      <div className="border-4 border-double border-[#000080] bg-snow p-3 sm:p-5">
         <div className="bg-[#000080] p-2 text-center text-lg font-bold text-yellow-300 sm:text-3xl">
           ★ Bienvenue sur le site de la Boulangerie Martin ★
         </div>
@@ -114,12 +114,12 @@ function NewSite() {
             </h3>
             <div className="mt-6 flex flex-wrap gap-3 text-sm">
               <span className="rounded-full bg-[#E8A15C] px-5 py-2.5 font-medium text-[#1C1410]">Commander en ligne</span>
-              <span className="rounded-full border border-white/25 px-5 py-2.5">Horaires & accès</span>
+              <span className="rounded-full border border-snow/25 px-5 py-2.5">Horaires & accès</span>
             </div>
           </div>
           <div className="hidden grid-cols-2 gap-3 sm:grid">
             {['Levain', 'Croissants', 'Tartes', 'Brioches'].map((x, i) => (
-              <div key={x} className="rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur">
+              <div key={x} className="rounded-2xl border border-snow/10 bg-snow/5 p-3 backdrop-blur">
                 <div className="h-14 rounded-xl" style={{ background: `linear-gradient(135deg, hsl(${28 + i * 6} 70% ${55 - i * 5}%), hsl(${18 + i * 4} 65% ${35 - i * 3}%))` }} />
                 <p className="mt-2 text-sm">{x}</p>
               </div>

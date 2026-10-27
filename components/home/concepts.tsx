@@ -79,7 +79,7 @@ export function ConceptMenuiserie({ mobile }: ConceptProps) {
           <p className="mt-5 max-w-sm text-[15px] leading-relaxed opacity-75">
             Cuisines, escaliers et agencements fabriqués dans notre atelier, posés chez vous.
           </p>
-          <span className="mt-7 inline-block rounded-full bg-[#A0673A] px-6 py-3 text-sm font-medium text-white">
+          <span className="mt-7 inline-block rounded-full bg-[#A0673A] px-6 py-3 text-sm font-medium text-snow">
             Demander un devis
           </span>
         </div>
@@ -169,7 +169,7 @@ export function ConceptRestaurant({ mobile }: ConceptProps) {
         </div>
       </header>
       <section className={cn(mobile ? 'px-5 py-8' : 'px-12 py-10')}>
-        <div className="flex gap-6 border-b border-white/15">
+        <div className="flex gap-6 border-b border-snow/15">
           {(Object.keys(menu) as (keyof typeof menu)[]).map((t) => (
             <button
               key={t}
@@ -183,7 +183,7 @@ export function ConceptRestaurant({ mobile }: ConceptProps) {
         </div>
         <ul className={cn('mt-4 grid', mobile ? 'grid-cols-1' : 'grid-cols-3 gap-6')}>
           {menu[tab].map(([dish, price]) => (
-            <li key={dish} className="flex items-baseline justify-between gap-3 border-b border-dashed border-white/15 py-4 text-[15px]">
+            <li key={dish} className="flex items-baseline justify-between gap-3 border-b border-dashed border-snow/15 py-4 text-[15px]">
               <span>{dish}</span>
               <span className="text-[#D9B26F]">{price}</span>
             </li>
@@ -212,7 +212,7 @@ export function ConceptCoiffeur({ mobile }: ConceptProps) {
           </span>
         }
         links={['Prestations', 'Tarifs', 'L’équipe']}
-        cta={<span className="rounded-full bg-[#1A1016] px-5 py-2.5 text-sm text-white">Prendre RDV</span>}
+        cta={<span className="rounded-full bg-[#1A1016] px-5 py-2.5 text-sm text-snow">Prendre RDV</span>}
       />
       <div className={cn('grid gap-8', mobile ? 'px-5 pb-10' : 'grid-cols-[1fr_1.1fr] items-start px-12 pb-12 pt-2')}>
         <div>
@@ -225,7 +225,7 @@ export function ConceptCoiffeur({ mobile }: ConceptProps) {
             Choisissez une prestation et un créneau, on s’occupe du reste.
           </p>
         </div>
-        <div className="rounded-3xl bg-white p-6 shadow-xl shadow-[#E0457B]/10">
+        <div className="rounded-3xl bg-snow p-6 shadow-xl shadow-[#E0457B]/10">
           <p className="text-sm font-medium">1. Prestation</p>
           <div className="mt-3 flex flex-wrap gap-2">
             {services.map((s) => (
@@ -233,7 +233,7 @@ export function ConceptCoiffeur({ mobile }: ConceptProps) {
                 key={s}
                 type="button"
                 onClick={() => setService(s)}
-                className={cn('rounded-full px-4 py-2 text-sm transition-colors', service === s ? 'bg-[#E0457B] text-white' : 'bg-[#FFF1F4] hover:bg-[#FBD9E3]')}
+                className={cn('rounded-full px-4 py-2 text-sm transition-colors', service === s ? 'bg-[#E0457B] text-snow' : 'bg-[#FFF1F4] hover:bg-[#FBD9E3]')}
               >
                 {s}
               </button>
@@ -246,13 +246,13 @@ export function ConceptCoiffeur({ mobile }: ConceptProps) {
                 key={s}
                 type="button"
                 onClick={() => setSlot(s)}
-                className={cn('rounded-xl border py-2.5 text-sm transition-colors', slot === s ? 'border-[#1A1016] bg-[#1A1016] text-white' : 'border-[#1A1016]/10 hover:border-[#1A1016]/40')}
+                className={cn('rounded-xl border py-2.5 text-sm transition-colors', slot === s ? 'border-[#1A1016] bg-[#1A1016] text-snow' : 'border-[#1A1016]/10 hover:border-[#1A1016]/40')}
               >
                 {s}
               </button>
             ))}
           </div>
-          <div className={cn('mt-6 rounded-2xl px-5 py-4 text-sm transition-colors', slot ? 'bg-[#1A1016] text-white' : 'bg-[#FFF1F4] text-[#1A1016]/50')}>
+          <div className={cn('mt-6 rounded-2xl px-5 py-4 text-sm transition-colors', slot ? 'bg-[#1A1016] text-snow' : 'bg-[#FFF1F4] text-[#1A1016]/50')}>
             {slot ? `✓ ${service} à ${slot} — démo` : 'Sélectionnez un créneau'}
           </div>
         </div>
@@ -272,7 +272,7 @@ const products = [
 export function ConceptFleuriste({ mobile }: ConceptProps) {
   const [cart, setCart] = useState<string[]>([])
   return (
-    <div className="min-h-full bg-white font-sans text-[#111]">
+    <div className="min-h-full bg-snow font-sans text-[#111]">
       <MiniNav
         mobile={mobile}
         logo={<span className="font-display text-3xl italic text-[#3B6D4A]">Pavot</span>}
@@ -280,7 +280,7 @@ export function ConceptFleuriste({ mobile }: ConceptProps) {
         cta={
           <span className="relative rounded-full border border-[#111]/15 px-5 py-2.5 text-sm">
             Panier
-            <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#3B6D4A] px-1.5 text-xs text-white">
+            <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#3B6D4A] px-1.5 text-xs text-snow">
               {cart.length}
             </span>
           </span>
@@ -289,7 +289,7 @@ export function ConceptFleuriste({ mobile }: ConceptProps) {
       {mobile && (
         <div className="mx-5 mb-4 flex items-center justify-between rounded-2xl bg-[#F1F5EE] px-4 py-3 text-sm">
           <span>Panier</span>
-          <span className="rounded-full bg-[#3B6D4A] px-2.5 py-0.5 text-xs text-white">{cart.length} article(s)</span>
+          <span className="rounded-full bg-[#3B6D4A] px-2.5 py-0.5 text-xs text-snow">{cart.length} article(s)</span>
         </div>
       )}
       <header className={cn(mobile ? 'px-5' : 'px-12 pt-2')}>
@@ -313,7 +313,7 @@ export function ConceptFleuriste({ mobile }: ConceptProps) {
                 <button
                   type="button"
                   onClick={() => setCart((c) => (added ? c.filter((n) => n !== p.name) : [...c, p.name]))}
-                  className={cn('rounded-full px-3 py-1.5 text-xs transition-colors', added ? 'bg-[#3B6D4A] text-white' : 'bg-white hover:bg-[#3B6D4A] hover:text-white')}
+                  className={cn('rounded-full px-3 py-1.5 text-xs transition-colors', added ? 'bg-[#3B6D4A] text-snow' : 'bg-snow hover:bg-[#3B6D4A] hover:text-snow')}
                 >
                   {added ? '✓ Ajouté' : 'Ajouter'}
                 </button>

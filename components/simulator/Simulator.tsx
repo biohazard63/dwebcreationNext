@@ -79,7 +79,7 @@ export function Simulator() {
                     className={cn(
                       'mt-0.5 flex h-6 w-6 flex-none items-center justify-center border transition-colors',
                       question.multiple ? 'rounded-md' : 'rounded-full',
-                      active ? 'border-transparent bg-gradient-to-br from-flame to-blush' : 'border-white/25'
+                      active ? 'border-transparent bg-gradient-to-br from-flame to-blush text-snow' : 'border-white/25'
                     )}
                   >
                     {active && <Check className="h-3.5 w-3.5" aria-hidden="true" />}
@@ -186,7 +186,7 @@ function Result({
         <button
           type="button"
           onClick={onSend}
-          className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-8 font-medium text-white shadow-[0_10px_40px_-10px_rgba(255,61,127,0.7)] transition-transform hover:scale-[1.03]"
+          className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-8 font-medium text-snow shadow-[0_10px_40px_-10px_rgba(255,61,127,0.7)] transition-transform hover:scale-[1.03]"
         >
           Recevoir mon devis gratuit
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />

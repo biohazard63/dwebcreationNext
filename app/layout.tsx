@@ -22,11 +22,15 @@ const grotesk = Bricolage_Grotesque({ subsets: ['latin'], display: 'swap', varia
 export const metadata: Metadata = defaultMetadata
 
 export const viewport: Viewport = {
-  themeColor: '#07070A',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#F6F6F9' },
+    { media: '(prefers-color-scheme: dark)', color: '#07070A' },
+  ],
 }
 
-// Active les animations d'apparition uniquement si JavaScript est disponible
-const jsScript = `document.documentElement.classList.add('js')`
+// Avant le premier affichage : active les animations (JS disponible) et applique le thème
+// choisi, ou à défaut celui de l'appareil, pour éviter tout flash clair / sombre
+const initScript = `(function(){var d=document.documentElement;d.classList.add('js');try{var t=localStorage.getItem('theme');if(t==='dark'||(t!=='light'&&window.matchMedia('(prefers-color-scheme: dark)').matches)){d.classList.add('dark')}}catch(e){d.classList.add('dark')}})()`
 
 // La page Réalisations n'apparaît dans le menu que lorsqu'il y a des projets à montrer
 const links = navigation.filter((item) => item.href !== '/portfolio' || projects.length > 0)
@@ -35,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr" className={`${sans.variable} ${display.variable} ${grotesk.variable} scroll-smooth`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: jsScript }} />
+        <script dangerouslySetInnerHTML={{ __html: initScript }} />
       </head>
       <body className="font-sans">
         <a

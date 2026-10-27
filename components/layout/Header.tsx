@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Menu, Phone, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/layout/Logo'
+import { ThemeToggle } from '@/components/layout/ThemeToggle'
 import { siteConfig } from '@/lib/site'
 import { cn } from '@/lib/utils'
 
@@ -55,10 +56,11 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
           })}
         </ul>
 
-        <div className="hidden items-center gap-6 lg:flex">
+        <div className="hidden items-center gap-5 lg:flex">
+          <ThemeToggle />
           <a
             href={siteConfig.phoneHref}
-            className="hidden items-center gap-2 text-sm text-mist transition-colors hover:text-white xl:flex"
+            className="hidden items-center gap-2 whitespace-nowrap text-sm text-mist transition-colors hover:text-white xl:flex"
           >
             <Phone className="h-4 w-4" aria-hidden="true" />
             {siteConfig.phone}
@@ -68,16 +70,19 @@ export function Header({ links }: { links: { name: string; href: string }[] }) {
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="-mr-2 flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-white/10 lg:hidden"
-          onClick={() => setOpen(true)}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-        >
-          <Menu className="h-6 w-6" aria-hidden="true" />
-          <span className="sr-only">Ouvrir le menu</span>
-        </button>
+        <div className="flex items-center gap-2 lg:hidden">
+          <ThemeToggle />
+          <button
+            type="button"
+            className="-mr-2 flex h-10 w-10 items-center justify-center rounded-full text-white hover:bg-white/10"
+            onClick={() => setOpen(true)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+          >
+            <Menu className="h-6 w-6" aria-hidden="true" />
+            <span className="sr-only">Ouvrir le menu</span>
+          </button>
+        </div>
       </nav>
 
       {open && (

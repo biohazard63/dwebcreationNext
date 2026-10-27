@@ -57,7 +57,7 @@ export function Hero() {
               'radial-gradient(600px circle at var(--gx, 70%) var(--gy, 30%), rgba(255, 61, 127, 0.12), transparent 60%)',
           }}
         />
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(var(--fg)/0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgb(var(--fg)/0.05)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]" />
       </div>
 
       <div className="container relative grid gap-16 pb-24 pt-14 sm:pt-20 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-12 lg:pb-32 lg:pt-24">
@@ -77,7 +77,7 @@ export function Hero() {
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Link
               href="/contact"
-              className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-8 font-medium text-white shadow-[0_10px_40px_-10px_rgba(255,61,127,0.7)] transition-transform hover:scale-[1.03]"
+              className="group inline-flex h-14 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-flame via-blush to-violet px-8 font-medium text-snow shadow-[0_10px_40px_-10px_rgba(255,61,127,0.7)] transition-transform hover:scale-[1.03]"
             >
               Demander un devis gratuit
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden="true" />
@@ -144,10 +144,10 @@ function BuildingMockup() {
           <div className="build relative overflow-hidden rounded-xl p-6 sm:p-8" style={d(450)}>
             <div className="grad-animate absolute inset-0 bg-gradient-to-br from-flame/70 via-blush/60 to-violet/70" />
             <div className="relative space-y-3">
-              <span className="block h-4 w-3/4 rounded-full bg-white/90" />
-              <span className="block h-4 w-1/2 rounded-full bg-white/90" />
-              <span className="block h-2 w-2/3 rounded-full bg-white/50" />
-              <span className="mt-4 inline-block h-8 w-28 rounded-full bg-white shadow-lg" />
+              <span className="block h-4 w-3/4 rounded-full bg-snow/90" />
+              <span className="block h-4 w-1/2 rounded-full bg-snow/90" />
+              <span className="block h-2 w-2/3 rounded-full bg-snow/50" />
+              <span className="mt-4 inline-block h-8 w-28 rounded-full bg-snow shadow-lg" />
             </div>
           </div>
 
@@ -166,21 +166,21 @@ function BuildingMockup() {
 
       {/* Badges flottants */}
       <div className="build absolute hidden sm:block -left-4 top-[38%] sm:-left-12" style={d(1400)}>
-        <div className="float glass flex items-center gap-2 rounded-2xl px-4 py-3 text-sm shadow-xl">
+        <div className="float glass dark:bg-night-700/90 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm shadow-xl">
           <Smartphone className="h-4 w-4 text-flame" />
           Parfait sur mobile
         </div>
       </div>
       <div className="build absolute hidden sm:block -right-3 top-1/2 sm:-right-8" style={d(1600)}>
-        <div className="float glass flex items-center gap-2 rounded-2xl px-4 py-3 text-sm shadow-xl [animation-delay:1.5s]">
+        <div className="float glass dark:bg-night-700/90 flex items-center gap-2 rounded-2xl px-4 py-3 text-sm shadow-xl [animation-delay:1.5s]">
           <Gauge className="h-4 w-4 text-blush" />
           Chargement rapide
         </div>
       </div>
       <div className="build absolute -bottom-6 left-6 sm:left-12" style={d(1800)}>
-        <div className="float glass flex items-center gap-3 rounded-2xl px-4 py-3 shadow-xl [animation-delay:3s]">
+        <div className="float glass dark:bg-night-700/90 flex items-center gap-3 rounded-2xl px-4 py-3 shadow-xl [animation-delay:3s]">
           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-flame to-blush">
-            <MapPin className="h-4 w-4 text-white" />
+            <MapPin className="h-4 w-4 text-snow" />
           </span>
           <span className="text-sm">
             <span className="block font-medium">Nouvelle demande de devis</span>
